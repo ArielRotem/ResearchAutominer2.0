@@ -1,0 +1,29 @@
+[
+    {
+        "name": "remove_duplicates",
+        "params": {
+            "columns": ["PatientID", "VisitDate"]
+        }
+    },
+    {
+        "name": "filter_by_value",
+        "params": {
+            "column": "Diagnosis",
+            "value": "Cancer"
+        }
+    },
+    {
+        "name": "rename_column",
+        "params": {
+            "old_name": "Age",
+            "new_name": "PatientAge"
+        }
+    },
+    {
+        "name": "add_row_index_column",
+        "params": {
+            "col_name": "OriginalIndex",
+            "first_position": true
+        }
+    }
+]

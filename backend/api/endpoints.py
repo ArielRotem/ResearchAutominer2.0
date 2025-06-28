@@ -4,6 +4,7 @@ from backend.core.function_loader import load_functions
 from backend.core.manuscript_runner import run_manuscript
 from backend.api.gemini_client import generate_function
 import pandas as pd
+import numpy as np
 import io
 import os
 import json
@@ -33,16 +34,23 @@ async def upload_csv(file: UploadFile = File(...)):
     
     try:
         content = await file.read()
-        df = pd.read_csv(io.BytesIO(content))
+        df = pd.read_csv(io.BytesIO(content), low_memory=False) # Use low_memory=False to suppress DtypeWarning and improve type inference
         
+        # Robustly handle non-JSON-serializable values (NaN, inf, -inf) and convert all to string for JSON compatibility
+        for col in df.columns:
+            df[col] = df[col].astype(str) # Convert entire column to string
+            df[col] = df[col].replace('nan', None) # Replace string 'nan' with None
+            df[col] = df[col].replace('inf', None) # Replace string 'inf' with None
+            df[col] = df[col].replace('-inf', None) # Replace string '-inf' with None
+
         headers = df.columns.tolist()
-        sample_data = df.head(50).to_dict(orient="records")
+        all_data = df.to_dict(orient="records") # Send all data for frontend pagination
         
         return {
             "filename": file.filename,
             "headers": headers,
             "rowCount": len(df),
-            "sampleData": sample_data
+            "allData": all_data # Renamed from sampleData to allData
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing file: {e}")
