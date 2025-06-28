@@ -25,8 +25,16 @@ def load_functions() -> Dict[str, Callable]:
                                 "callable": func,
                                 "name": name,
                                 "doc": inspect.getdoc(func),
-                                "params": list(inspect.signature(func).parameters.keys())
-                            }
+                                "params": [
+                                {
+                                    "name": p.name,
+                                    "kind": str(p.kind),
+                                    "default": p.default if p.default is not inspect.Parameter.empty else None,
+                                    "annotation": str(p.annotation) if p.annotation is not inspect.Parameter.empty else None
+                                }
+                                for p in inspect.signature(func).parameters.values() if p.name != 'df'
+                            ]
+                        }
                 except Exception as e:
                     print(f"Error loading module {module_name}: {e}")
     return functions

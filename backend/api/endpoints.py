@@ -21,7 +21,7 @@ def list_functions():
         name: {
             "name": data["name"],
             "doc": data["doc"],
-            "params": [p for p in data["params"] if p != 'df']
+            "params": data["params"]
         }
         for name, data in functions.items()
     }
@@ -69,7 +69,7 @@ async def test_manuscript(data: Dict[str, Any] = Body(...)):
         result_df = run_manuscript(df, manuscript)
         return result_df.to_dict(orient="records")
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=f"Error processing manuscript: {e}\n\nTraceback:\n{traceback.format_exc()}")
 
 @router.get("/manuscripts")
 def list_manuscripts():

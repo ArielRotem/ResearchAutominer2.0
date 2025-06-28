@@ -1,0 +1,2140 @@
+
+[
+    {
+        "name": "remove_duplicates",
+        "params": {
+            "columns": ["patient id", "parity - birth number", "gravidity - pregnancy number"]
+        },
+        "_description": "Removes duplicate rows based on Patient ID, Parity, and Gravidity. This ensures each unique birth event is considered once."
+    },
+    {
+        "name": "containswords_result_exists",
+        "params": {
+            "column_name": "blood cultures-test type_1",
+            "words": ["דם"],
+            "step_size": 4,
+            "num_steps": 40,
+            "result_column_name": "blood_culture_taken"
+        },
+        "_description": "Flags if blood cultures were taken. Checks 'blood cultures-test type_1' for the word 'דם' (blood) across 40 batches, with a step size of 4 columns."
+    },
+    {
+        "name": "containswords_and_nonempty_result_values",
+        "params": {
+            "column_name": "blood cultures-test type_1",
+            "words": ["דם"],
+            "result_column_name": "blood_culture_organisms",
+            "col3": "blood cultures-organism detected_1",
+            "step_size": 4,
+            "num_steps": 40
+        },
+        "_description": "Extracts detected organisms from blood cultures if 'דם' is present in the test type. Collects non-empty organism names."
+    },
+    {
+        "name": "containswords_and_nonempty_result_values",
+        "params": {
+            "column_name": "blood cultures-test type_1",
+            "words": ["דם"],
+            "result_column_name": "blood_culture_organisms_category",
+            "col3": "blood cultures-organism detected_1",
+            "step_size": 4,
+            "num_steps": 40,
+            "dictionary": {
+                "Staphylococcus aureus": "Staph Aureus",
+                "Coagulase-negative Staphylococcus": "Contaminants (CONS etc.)",
+                "Escherichia coli": "Enterobacterales",
+                "Klebsiella pneumoniae": "Enterobacterales",
+                "Enterobacter cloacae": "Enterobacterales",
+                "Proteus mirabilis": "Enterobacterales",
+                "Pseudomonas aeruginosa": "Other Gram Negatives",
+                "Streptococcus agalactiae": "GBS",
+                "Enterococcus faecalis": "Non-hemolitic Strep (viridans + enterococci)",
+                "Enterococcus faecium": "Non-hemolitic Strep (viridans + enterococci)",
+                "Streptococcus pyogenes": "Non-hemolitic Strep (viridans + enterococci)",
+                "Bacteroides fragilis": "Anaerobes",
+                "Clostridium perfringens": "Anaerobes",
+                "Listeria monocytogenes": "Listeria",
+                "Candida albicans": "Other",
+                "Candida glabrata": "Other",
+                "Acinetobacter baumannii": "Other Gram Negatives",
+                "Stenotrophomonas maltophilia": "Other Gram Negatives",
+                "Citrobacter freundii": "Enterobacterales",
+                "Serratia marcescens": "Enterobacterales",
+                "Morganella morganii": "Enterobacterales",
+                "Providencia stuartii": "Enterobacterales",
+                "Providencia rettgeri": "Enterobacterales",
+                "Burkholderia cepacia": "Other Gram Negatives",
+                "Staphylococcus epidermidis": "Contaminants (CONS etc.)",
+                "Staphylococcus lugdunensis": "Contaminants (CONS etc.)",
+                "Streptococcus pneumoniae": "Non-hemolitic Strep (viridans + enterococci)",
+                "Streptococcus viridans group": "Non-hemolitic Strep (viridans + enterococci)",
+                "Peptostreptococcus spp.": "Anaerobes",
+                "Fusobacterium spp.": "Anaerobes",
+                "Prevotella spp.": "Anaerobes",
+                "Veillonella spp.": "Anaerobes",
+                "Propionibacterium acnes": "Contaminants (CONS etc.)",
+                "Corynebacterium spp.": "Contaminants (CONS etc.)",
+                "Bacillus spp.": "Contaminants (CONS etc.)",
+                "Micrococcus spp.": "Contaminants (CONS etc.)",
+                "Neisseria gonorrhoeae": "Vaginal Flora",
+                "Chlamydia trachomatis": "Vaginal Flora",
+                "Mycoplasma hominis": "Vaginal Flora",
+                "Ureaplasma urealyticum": "Vaginal Flora",
+                "Gardnerella vaginalis": "Vaginal Flora",
+                "Trichomonas vaginalis": "Vaginal Flora",
+                "Mobiluncus spp.": "Vaginal Flora",
+                "Prevotella bivia": "Vaginal Flora",
+                "Porphyromonas spp.": "Vaginal Flora",
+                "Bacteroides ureolyticus": "Vaginal Flora",
+                "Finegoldia magna": "Vaginal Flora",
+                "Parvimonas micra": "Vaginal Flora",
+                "Anaerococcus spp.": "Vaginal Flora",
+                "Peptoniphilus spp.": "Vaginal Flora",
+                "Dialister spp.": "Vaginal Flora",
+                "Atopobium vaginae": "Vaginal Flora",
+                "Sneathia sanguinegens": "Vaginal Flora",
+                "Leptotrichia spp.": "Vaginal Flora",
+                "Megasphaera spp.": "Vaginal Flora",
+                "Campylobacter spp.": "Other",
+                "Vibrio spp.": "Other",
+                "Aeromonas spp.": "Other",
+                "Plesiomonas shigelloides": "Other",
+                "Yersinia enterocolitica": "Other",
+                "Francisella tularensis": "Other",
+                "Brucella spp.": "Other",
+                "Legionella pneumophila": "Other",
+                "Bordetella pertussis": "Other",
+                "Haemophilus influenzae": "Other",
+                "Moraxella catarrhalis": "Other",
+                "Neisseria meningitidis": "Other",
+                "Kingella kingae": "Other",
+                "Capnocytophaga spp.": "Other",
+                "Eikenella corrodens": "Other",
+                "Pasteurella multocida": "Other",
+                "Streptobacillus moniliformis": "Other",
+                "Spirillum minus": "Other",
+                "Treponema pallidum": "Other",
+                "Borrelia burgdorferi": "Other",
+                "Leptospira spp.": "Other",
+                "Rickettsia spp.": "Other",
+                "Anaplasma phagocytophilum": "Other",
+                "Ehrlichia chaffeensis": "Other",
+                "Coxiella burnetii": "Other",
+                "Tropheryma whipplei": "Other",
+                "Bartonella spp.": "Other",
+                "Orientia tsutsugamushi": "Other",
+                "Mycoplasma pneumoniae": "Other",
+                "Chlamydophila pneumoniae": "Other",
+                "Chlamydophila psittaci": "Other",
+                "Coxiella burnetii": "Other",
+                "Tropheryma whipplei": "Other",
+                "Bartonella spp.": "Other",
+                "Orientia tsutsugamushi": "Other",
+                "Mycoplasma pneumoniae": "Other",
+                "Chlamydophila pneumoniae": "Other",
+                "Chlamydophila psittaci": "Other",
+                "Cryptococcus neoformans": "Other",
+                "Aspergillus spp.": "Other",
+                "Histoplasma capsulatum": "Other",
+                "Blastomyces dermatitidis": "Other",
+                "Coccidioides immitis": "Other",
+                "Paracoccidioides brasiliensis": "Other",
+                "Sporothrix schenckii": "Other",
+                "Pneumocystis jirovecii": "Other",
+                "Toxoplasma gondii": "Other",
+                "Plasmodium spp.": "Other",
+                "Babesia spp.": "Other",
+                "Trypanosoma cruzi": "Other",
+                "Leishmania spp.": "Other",
+                "Schistosoma spp.": "Other",
+                "Filarial worms": "Other",
+                "Strongyloides stercoralis": "Other",
+                "Trichinella spiralis": "Other",
+                "Taenia solium": "Other",
+                "Echinococcus spp.": "Other",
+                "Entamoeba histolytica": "Other",
+                "Giardia lamblia": "Other",
+                "Cryptosporidium spp.": "Other",
+                "Cyclospora cayetanensis": "Other",
+                "Isospora belli": "Other",
+                "Microsporidia spp.": "Other",
+                "Enterocytozoon bieneusi": "Other",
+                "Encephalitozoon intestinalis": "Other",
+                "Blastocystis hominis": "Other",
+                "Dientamoeba fragilis": "Other",
+                "Balantidium coli": "Other",
+                "Naegleria fowleri": "Other",
+                "Acanthamoeba spp.": "Other",
+                "Balamuthia mandrillaris": "Other",
+                "Sappinia diploidea": "Other",
+                "Trichomonas vaginalis": "Vaginal Flora",
+                "Pediculus humanus": "Other",
+                "Pthirus pubis": "Other",
+                "Sarcoptes scabiei": "Other",
+                "Demodex folliculorum": "Other",
+                "Cimex lectularius": "Other",
+                "Latrodectus spp.": "Other",
+                "Loxosceles spp.": "Other",
+                "Tityus spp.": "Other",
+                "Centruroides spp.": "Other",
+                "Latrodectus spp.": "Other",
+                "Loxosceles spp.": "Other",
+                "Tityus spp.": "Other",
+                "Centruroides spp.": "Other",
+                "Anopheles spp.": "Other",
+                "Aedes spp.": "Other",
+                "Culex spp.": "Other",
+                "Phlebotomus spp.": "Other",
+                "Lutzomyia spp.": "Other",
+                "Glossina spp.": "Other",
+                "Triatoma spp.": "Other",
+                "Rhodnius spp.": "Other",
+                "Panstrongylus spp.": "Other",
+                "Xenopsylla cheopis": "Other",
+                "Pulex irritans": "Other",
+                "Ctenocephalides felis": "Other",
+                "Ctenocephalides canis": "Other",
+                "Dermacentor variabilis": "Other",
+                "Ixodes scapularis": "Other",
+                "Amblyomma americanum": "Other",
+                "Rhipicephalus sanguineus": "Other",
+                "Ornithodoros spp.": "Other",
+                "Argas spp.": "Other",
+                "Dermanyssus gallinae": "Other",
+                "Ornithonyssus sylviarum": "Other",
+                "Trombicula spp.": "Other",
+                "Sarcoptes scabiei": "Other",
+                "Demodex folliculorum": "Other",
+                "Cimex lectularius": "Other",
+                "Latrodectus spp.": "Other",
+                "Loxosceles spp.": "Other",
+                "Tityus spp.": "Other",
+                "Centruroides spp.": "Other",
+                "Anopheles spp.": "Other",
+                "Aedes spp.": "Other",
+                "Culex spp.": "Other",
+                "Phlebotomus spp.": "Other",
+                "Lutzomyia spp.": "Other",
+                "Glossina spp.": "Other",
+                "Triatoma spp.": "Other",
+                "Rhodnius spp.": "Other",
+                "Panstrongylus spp.": "Other",
+                "Xenopsylla cheopis": "Other",
+                "Pulex irritans": "Other",
+                "Ctenocephalides felis": "Other",
+                "Ctenocephalides canis": "Other",
+                "Dermacentor variabilis": "Other",
+                "Ixodes scapularis": "Other",
+                "Amblyomma americanum": "Other",
+                "Rhipicephalus sanguineus": "Other",
+                "Ornithodoros spp.": "Other",
+                "Argas spp.": "Other",
+                "Dermanyssus gallinae": "Other",
+                "Ornithonyssus sylviarum": "Other",
+                "Trombicula spp.": "Other",
+                "Schistosoma spp.": "Other",
+                "Filarial worms": "Other",
+                "Strongyloides stercoralis": "Other",
+                "Trichinella spiralis": "Other",
+                "Taenia solium": "Other",
+                "Echinococcus spp.": "Other",
+                "" : "Uncategorized"
+            }
+        },
+        "_description": "Categorizes detected organisms from blood cultures based on a predefined dictionary. Collects non-empty organism categories."
+    },
+    {
+        "name": "remove_contaminant_and_count",
+        "params": {
+            "column_name": "blood_culture_organisms_category",
+            "new_column_name": "Blood_culture_Type_of_growth",
+            "delimiter": ",",
+            "default_value": 0,
+            "contaminant": "Contaminants (CONS etc.)"
+        },
+        "_description": "Processes blood culture organism categories: removes 'Contaminants (CONS etc.)' and counts remaining elements (0, 1, or 2+)."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "blood_culture_organisms_category",
+            "new_column_name": "blood_organisms_Contaminants_yes_or_no",
+            "search_list": ["Contaminants (CONS etc.)"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if blood culture organisms include 'Contaminants (CONS etc.)'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "blood_culture_organisms_category",
+            "new_column_name": "blood_organisms_Non_hemolytic_Strep_yes_or_no",
+            "search_list": ["Non-hemolitic Strep (viridans + enterococci)"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if blood culture organisms include 'Non-hemolitic Strep'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "blood_culture_organisms_category",
+            "new_column_name": "blood_organisms_Enterobacterales_yes_or_no",
+            "search_list": ["Enterobacterales"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if blood culture organisms include 'Enterobacterales'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "blood_culture_organisms_category",
+            "new_column_name": "blood_organisms_GBS_yes_or_no",
+            "search_list": ["GBS"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if blood culture organisms include 'GBS'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "blood_culture_organisms_category",
+            "new_column_name": "blood_organisms_Anaerobes_yes_or_no",
+            "search_list": ["Anaerobes"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if blood culture organisms include 'Anaerobes'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "blood_culture_organisms_category",
+            "new_column_name": "blood_organisms_Other_Gram_Negatives_yes_or_no",
+            "search_list": ["Other Gram Negatives"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if blood culture organisms include 'Other Gram Negatives'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "blood_culture_organisms_category",
+            "new_column_name": "blood_organisms_Vaginal_Flora_yes_or_no",
+            "search_list": ["Vaginal Flora"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if blood culture organisms include 'Vaginal Flora'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "blood_culture_organisms_category",
+            "new_column_name": "blood_organisms_Staph_Aureus_yes_or_no",
+            "search_list": ["Staph Aureus"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if blood culture organisms include 'Staph Aureus'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "blood_culture_organisms_category",
+            "new_column_name": "blood_organisms_Listeria_yes_or_no",
+            "search_list": ["Listeria"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if blood culture organisms include 'Listeria'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "blood_culture_organisms_category",
+            "new_column_name": "blood_organisms_Other_yes_or_no",
+            "search_list": ["Other", "Uncategorized"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if blood culture organisms include 'Other' or 'Uncategorized'."
+    },
+    {
+        "name": "containswords_result_exists",
+        "params": {
+            "column_name": "other cultures-specimen material_1",
+            "words": ["מורסה", "פצע"],
+            "step_size": 3,
+            "num_steps": 13,
+            "result_column_name": "abscess_culture_taken"
+        },
+        "_description": "Flags if abscess cultures were taken. Checks 'other cultures-specimen material_1' for 'מורסה' or 'פצע' across 13 batches."
+    },
+    {
+        "name": "process_other_cultures",
+        "params": {
+            "collection_date_col": "other cultures-collection date-days from reference_1",
+            "organism_col": "other cultures-organism detected_1",
+            "specimen_col": "other cultures-specimen material_1",
+            "step": 3,
+            "num_batches": 10,
+            "result_samples": "abscess_culture_samples_taken",
+            "result_organisms": "abscess_culture_organisms_detected",
+            "result_organism_categories": "abscess_culture_organisms_category",
+            "organism_translation_dict": {
+                "Staphylococcus aureus": "Staph Aureus",
+                "Coagulase-negative Staphylococcus": "Contaminants (CONS etc.)",
+                "Escherichia coli": "Enterobacterales",
+                "Klebsiella pneumoniae": "Enterobacterales",
+                "Enterobacter cloacae": "Enterobacterales",
+                "Proteus mirabilis": "Enterobacterales",
+                "Pseudomonas aeruginosa": "Other Gram Negatives",
+                "Streptococcus agalactiae": "GBS",
+                "Enterococcus faecalis": "Non-hemolitic Strep (viridans + enterococci)",
+                "Enterococcus faecium": "Non-hemolitic Strep (viridans + enterococci)",
+                "Streptococcus pyogenes": "Non-hemolitic Strep (viridans + enterococci)",
+                "Bacteroides fragilis": "Anaerobes",
+                "Clostridium perfringens": "Anaerobes",
+                "Listeria monocytogenes": "Listeria",
+                "Candida albicans": "Other",
+                "Candida glabrata": "Other",
+                "Acinetobacter baumannii": "Other Gram Negatives",
+                "Stenotrophomonas maltophilia": "Other Gram Negatives",
+                "Citrobacter freundii": "Enterobacterales",
+                "Serratia marcescens": "Enterobacterales",
+                "Morganella morganii": "Enterobacterales",
+                "Providencia stuartii": "Enterobacterales",
+                "Providencia rettgeri": "Enterobacterales",
+                "Burkholderia cepacia": "Other Gram Negatives",
+                "Staphylococcus epidermidis": "Contaminants (CONS etc.)",
+                "Staphylococcus lugdunensis": "Contaminants (CONS etc.)",
+                "Streptococcus pneumoniae": "Non-hemolitic Strep (viridans + enterococci)",
+                "Streptococcus viridans group": "Non-hemolitic Strep (viridans + enterococci)",
+                "Peptostreptococcus spp.": "Anaerobes",
+                "Fusobacterium spp.": "Anaerobes",
+                "Prevotella spp.": "Anaerobes",
+                "Veillonella spp.": "Anaerobes",
+                "Propionibacterium acnes": "Contaminants (CONS etc.)",
+                "Corynebacterium spp.": "Contaminants (CONS etc.)",
+                "Bacillus spp.": "Contaminants (CONS etc.)",
+                "Micrococcus spp.": "Contaminants (CONS etc.)",
+                "Neisseria gonorrhoeae": "Vaginal Flora",
+                "Chlamydia trachomatis": "Vaginal Flora",
+                "Mycoplasma hominis": "Vaginal Flora",
+                "Ureaplasma urealyticum": "Vaginal Flora",
+                "Gardnerella vaginalis": "Vaginal Flora",
+                "Trichomonas vaginalis": "Vaginal Flora",
+                "Mobiluncus spp.": "Vaginal Flora",
+                "Prevotella bivia": "Vaginal Flora",
+                "Porphyromonas spp.": "Vaginal Flora",
+                "Bacteroides ureolyticus": "Vaginal Flora",
+                "Finegoldia magna": "Vaginal Flora",
+                "Parvimonas micra": "Vaginal Flora",
+                "Anaerococcus spp.": "Vaginal Flora",
+                "Peptoniphilus spp.": "Vaginal Flora",
+                "Dialister spp.": "Vaginal Flora",
+                "Atopobium vaginae": "Vaginal Flora",
+                "Sneathia sanguinegens": "Vaginal Flora",
+                "Leptotrichia spp.": "Vaginal Flora",
+                "Megasphaera spp.": "Vaginal Flora",
+                "Campylobacter spp.": "Other",
+                "Vibrio spp.": "Other",
+                "Aeromonas spp.": "Other",
+                "Plesiomonas shigelloides": "Other",
+                "Yersinia enterocolitica": "Other",
+                "Francisella tularensis": "Other",
+                "Brucella spp.": "Other",
+                "Legionella pneumophila": "Other",
+                "Bordetella pertussis": "Other",
+                "Haemophilus influenzae": "Other",
+                "Moraxella catarrhalis": "Other",
+                "Neisseria meningitidis": "Other",
+                "Kingella kingae": "Other",
+                "Capnocytophaga spp.": "Other",
+                "Eikenella corrodens": "Other",
+                "Pasteurella multocida": "Other",
+                "Streptobacillus moniliformis": "Other",
+                "Spirillum minus": "Other",
+                "Treponema pallidum": "Other",
+                "Borrelia burgdorferi": "Other",
+                "Leptospira spp.": "Other",
+                "Rickettsia spp.": "Other",
+                "Anaplasma phagocytophilum": "Other",
+                "Ehrlichia chaffeensis": "Other",
+                "Coxiella burnetii": "Other",
+                "Tropheryma whipplei": "Other",
+                "Bartonella spp.": "Other",
+                "Orientia tsutsugamushi": "Other",
+                "Mycoplasma pneumoniae": "Other",
+                "Chlamydophila pneumoniae": "Other",
+                "Chlamydophila psittaci": "Other",
+                "Coxiella burnetii": "Other",
+                "Tropheryma whipplei": "Other",
+                "Bartonella spp.": "Other",
+                "Orientia tsutsugamushi": "Other",
+                "Mycoplasma pneumoniae": "Other",
+                "Chlamydophila pneumoniae": "Other",
+                "Chlamydophila psittaci": "Other",
+                "Cryptococcus neoformans": "Other",
+                "Aspergillus spp.": "Other",
+                "Histoplasma capsulatum": "Other",
+                "Blastomyces dermatitidis": "Other",
+                "Coccidioides immitis": "Other",
+                "Paracoccidioides brasiliensis": "Other",
+                "Sporothrix schenckii": "Other",
+                "Pneumocystis jirovecii": "Other",
+                "Toxoplasma gondii": "Other",
+                "Plasmodium spp.": "Other",
+                "Babesia spp.": "Other",
+                "Trypanosoma cruzi": "Other",
+                "Leishmania spp.": "Other",
+                "Schistosoma spp.": "Other",
+                "Filarial worms": "Other",
+                "Strongyloides stercoralis": "Other",
+                "Trichinella spiralis": "Other",
+                "Taenia solium": "Other",
+                "Echinococcus spp.": "Other",
+                "Entamoeba histolytica": "Other",
+                "Giardia lamblia": "Other",
+                "Cryptosporidium spp.": "Other",
+                "Cyclospora cayetanensis": "Other",
+                "Isospora belli": "Other",
+                "Microsporidia spp.": "Other",
+                "Enterocytozoon bieneusi": "Other",
+                "Encephalitozoon intestinalis": "Other",
+                "Blastocystis hominis": "Other",
+                "Dientamoeba fragilis": "Other",
+                "Balantidium coli": "Other",
+                "Naegleria fowleri": "Other",
+                "Acanthamoeba spp.": "Other",
+                "Balamuthia mandrillaris": "Other",
+                "Sappinia diploidea": "Other",
+                "Trichomonas vaginalis": "Vaginal Flora",
+                "Pediculus humanus": "Other",
+                "Pthirus pubis": "Other",
+                "Sarcoptes scabiei": "Other",
+                "Demodex folliculorum": "Other",
+                "Cimex lectularius": "Other",
+                "Latrodectus spp.": "Other",
+                "Loxosceles spp.": "Other",
+                "Tityus spp.": "Other",
+                "Centruroides spp.": "Other",
+                "Latrodectus spp.": "Other",
+                "Loxosceles spp.": "Other",
+                "Tityus spp.": "Other",
+                "Centruroides spp.": "Other",
+                "Anopheles spp.": "Other",
+                "Aedes spp.": "Other",
+                "Culex spp.": "Other",
+                "Phlebotomus spp.": "Other",
+                "Lutzomyia spp.": "Other",
+                "Glossina spp.": "Other",
+                "Triatoma spp.": "Other",
+                "Rhodnius spp.": "Other",
+                "Panstrongylus spp.": "Other",
+                "Xenopsylla cheopis": "Other",
+                "Pulex irritans": "Other",
+                "Ctenocephalides felis": "Other",
+                "Ctenocephalides canis": "Other",
+                "Dermacentor variabilis": "Other",
+                "Ixodes scapularis": "Other",
+                "Amblyomma americanum": "Other",
+                "Rhipicephalus sanguineus": "Other",
+                "Ornithodoros spp.": "Other",
+                "Argas spp.": "Other",
+                "Dermanyssus gallinae": "Other",
+                "Ornithonyssus sylviarum": "Other",
+                "Trombicula spp.": "Other",
+                "Sarcoptes scabiei": "Other",
+                "Demodex folliculorum": "Other",
+                "Cimex lectularius": "Other",
+                "Latrodectus spp.": "Other",
+                "Loxosceles spp.": "Other",
+                "Tityus spp.": "Other",
+                "Centruroides spp.": "Other",
+                "Anopheles spp.": "Other",
+                "Aedes spp.": "Other",
+                "Culex spp.": "Other",
+                "Phlebotomus spp.": "Other",
+                "Lutzomyia spp.": "Other",
+                "Glossina spp.": "Other",
+                "Triatoma spp.": "Other",
+                "Rhodnius spp.": "Other",
+                "Panstrongylus spp.": "Other",
+                "Xenopsylla cheopis": "Other",
+                "Pulex irritans": "Other",
+                "Ctenocephalides felis": "Other",
+                "Ctenocephalides canis": "Other",
+                "Dermacentor variabilis": "Other",
+                "Ixodes scapularis": "Other",
+                "Amblyomma americanum": "Other",
+                "Rhipicephalus sanguineus": "Other",
+                "Ornithodoros spp.": "Other",
+                "Argas spp.": "Other",
+                "Dermanyssus gallinae": "Other",
+                "Ornithonyssus sylviarum": "Other",
+                "Trombicula spp.": "Other",
+                "Schistosoma spp.": "Other",
+                "Filarial worms": "Other",
+                "Strongyloides stercoralis": "Other",
+                "Trichinella spiralis": "Other",
+                "Taenia solium": "Other",
+                "Echinococcus spp.": "Other",
+                "": "Uncategorized"
+            },
+            "specimen_filter_keywords": ["מורסה", "פצע"]
+        },
+        "_description": "Processes other cultures data, extracting samples, organisms, and categorizing them based on specimen material keywords ('מורסה', 'פצע')."
+    },
+    {
+        "name": "remove_contaminant_and_count",
+        "params": {
+            "column_name": "abscess_culture_organisms_category",
+            "new_column_name": "abscess_culture_Type_of_growth",
+            "delimiter": ",",
+            "default_value": 0,
+            "contaminant": "Contaminants (CONS etc.)"
+        },
+        "_description": "Processes abscess culture organism categories: removes 'Contaminants (CONS etc.)' and counts remaining elements (0, 1, or 2+)."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "abscess_culture_organisms_category",
+            "new_column_name": "abscess_organisms_Contaminants_yes_or_no",
+            "search_list": ["Contaminants (CONS etc.)"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if abscess culture organisms include 'Contaminants (CONS etc.)'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "abscess_culture_organisms_category",
+            "new_column_name": "abscess_organisms_Non_hemolytic_Strep_yes_or_no",
+            "search_list": ["Non-hemolitic Strep (viridans + enterococci)"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if abscess culture organisms include 'Non-hemolitic Strep'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "abscess_culture_organisms_category",
+            "new_column_name": "abscess_organisms_Enterobacterales_yes_or_no",
+            "search_list": ["Enterobacterales"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if abscess culture organisms include 'Enterobacterales'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "abscess_culture_organisms_category",
+            "new_column_name": "abscess_organisms_GBS_yes_or_no",
+            "search_list": ["GBS"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if abscess culture organisms include 'GBS'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "abscess_culture_organisms_category",
+            "new_column_name": "abscess_organisms_Anaerobes_yes_or_no",
+            "search_list": ["Anaerobes"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if abscess culture organisms include 'Anaerobes'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "abscess_culture_organisms_category",
+            "new_column_name": "abscess_organisms_Other_Gram_Negatives_yes_or_no",
+            "search_list": ["Other Gram Negatives"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if abscess culture organisms include 'Other Gram Negatives'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "abscess_culture_organisms_category",
+            "new_column_name": "abscess_organisms_Vaginal_Flora_yes_or_no",
+            "search_list": ["Vaginal Flora"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if abscess culture organisms include 'Vaginal Flora'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "abscess_culture_organisms_category",
+            "new_column_name": "abscess_organisms_Staph_Aureus_yes_or_no",
+            "search_list": ["Staph Aureus"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if abscess culture organisms include 'Staph Aureus'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "abscess_culture_organisms_category",
+            "new_column_name": "abscess_organisms_Listeria_yes_or_no",
+            "search_list": ["Listeria"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if abscess culture organisms include 'Listeria'."
+    },
+    {
+        "name": "does_column_contain_string_in_category_list",
+        "params": {
+            "column_name": "abscess_culture_organisms_category",
+            "new_column_name": "abscess_organisms_Other_yes_or_no",
+            "search_list": ["Other", "Uncategorized"],
+            "delimiter": ",",
+            "empty_value": 0
+        },
+        "_description": "Flags if abscess culture organisms include 'Other' or 'Uncategorized'."
+    },
+    {
+        "name": "containswords_result_exists",
+        "params": {
+            "column_name": "antibiotics-medication_1",
+            "words": ["AMPICILLIN"],
+            "step_size": 3,
+            "num_steps": 108,
+            "result_column_name": "Antibiotics_given_Ampicillin"
+        },
+        "_description": "Flags if Ampicillin was given. Checks 'antibiotics-medication_1' for 'AMPICILLIN' across 108 batches."
+    },
+    {
+        "name": "containswords_result_exists",
+        "params": {
+            "column_name": "antibiotics-medication_1",
+            "words": ["AMOXYCILLIN", "AUGMENTIN"],
+            "step_size": 3,
+            "num_steps": 108,
+            "result_column_name": "Antibiotics_given_Augmentin"
+        },
+        "_description": "Flags if Amoxycillin or Augmentin was given."
+    },
+    {
+        "name": "containswords_result_exists",
+        "params": {
+            "column_name": "antibiotics-medication_1",
+            "words": ["ERTAPENEM", "MEROPENEM", "MERONEM"],
+            "step_size": 3,
+            "num_steps": 108,
+            "result_column_name": "Antibiotics_given_Carbapenem"
+        },
+        "_description": "Flags if Ertapenem, Meropenem, or Meronem (Carbapenem) was given."
+    },
+    {
+        "name": "containswords_result_exists",
+        "params": {
+            "column_name": "antibiotics-medication_1",
+            "words": ["ROCEPHIN", "CEFTRIAXONE"],
+            "step_size": 3,
+            "num_steps": 108,
+            "result_column_name": "Antibiotics_given_Ceftriaxone"
+        },
+        "_description": "Flags if Rocephin or Ceftriaxone was given."
+    },
+    {
+        "name": "containswords_result_exists",
+        "params": {
+            "column_name": "antibiotics-medication_1",
+            "words": ["CLINDAMYCIN", "DALACIN"],
+            "step_size": 3,
+            "num_steps": 108,
+            "result_column_name": "Antibiotics_given_Clindamycin"
+        },
+        "_description": "Flags if Clindamycin or Dalacin was given."
+    },
+    {
+        "name": "containswords_result_exists",
+        "params": {
+            "column_name": "antibiotics-medication_1",
+            "words": ["GENTAMYCIN", "GENTAMICIN"],
+            "step_size": 3,
+            "num_steps": 108,
+            "result_column_name": "Antibiotics_given_Gentamycin"
+        },
+        "_description": "Flags if Gentamycin was given."
+    },
+    {
+        "name": "containswords_result_exists",
+        "params": {
+            "column_name": "antibiotics-medication_1",
+            "words": ["FLAGYL", "METRONIDAZOLE"],
+            "step_size": 3,
+            "num_steps": 108,
+            "result_column_name": "Antibiotics_given_Metronidazole"
+        },
+        "_description": "Flags if Flagyl or Metronidazole was given."
+    },
+    {
+        "name": "containswords_result_exists",
+        "params": {
+            "column_name": "antibiotics-medication_1",
+            "words": ["PENICILLIN"],
+            "step_size": 3,
+            "num_steps": 108,
+            "result_column_name": "Antibiotics_given_Penicillin"
+        },
+        "_description": "Flags if Penicillin was given."
+    },
+    {
+        "name": "containswords_result_exists",
+        "params": {
+            "column_name": "antibiotics-medication_1",
+            "words": ["TAZOCIN", "TAZOBACTAM+PIPERACILLIN"],
+            "step_size": 3,
+            "num_steps": 108,
+            "result_column_name": "Antibiotics_given_Tazocin"
+        },
+        "_description": "Flags if Tazocin or Tazobactam+Piperacillin was given."
+    },
+    {
+        "name": "containswords_result_exists",
+        "params": {
+            "column_name": "antibiotics-medication_1",
+            "words": ["AZENIL", "NITROFURANTOIN", "DOXYLIN", "AMIKACIN"],
+            "step_size": 3,
+            "num_steps": 108,
+            "result_column_name": "Antibiotics_given_Other"
+        },
+        "_description": "Flags if Azenil, Nitrofurantoin, Doxylin, or Amikacin was given."
+    },
+    {
+        "name": "create_column_from_value_map",
+        "params": {
+            "source_column": "fetus count",
+            "new_column": "Multifetal pregnancy_yes_or_no",
+            "value_map": {
+                "1": 0,
+                "2": 1,
+                "3": 1
+            },
+            "default_value": ""
+        },
+        "_description": "Creates 'Multifetal pregnancy_yes_or_no' column: 1 for multiple fetuses (2 or 3), 0 for single (1)."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "cs info-main indication",
+            "new_column_name": "NVD_yes_or_no",
+            "value_empty": 1,
+            "value_not_empty": 0
+        },
+        "_description": "Flags 'NVD_yes_or_no' as 1 if 'cs info-main indication' is empty (indicating Normal Vaginal Delivery), else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "cs info-main indication",
+            "new_column_name": "CS_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'CS_yes_or_no' as 1 if 'cs info-main indication' is NOT empty (indicating Cesarean Section), else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "vacuum_diagnosis",
+            "new_column_name": "vacuume_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'vacuume_yes_or_no' as 1 if 'vacuum_diagnosis' is not empty (indicating vacuum delivery), else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "forceps_diagnosis",
+            "new_column_name": "forceps_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'forceps_yes_or_no' as 1 if 'forceps_diagnosis' is not empty (indicating forceps delivery), else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "fever_max 38-43 before delivery-numeric result",
+            "new_column_name": "Intrapartum_fever_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'Intrapartum_fever_yes_or_no' as 1 if 'fever_max 38-43 before delivery-numeric result' is not empty (indicating fever), else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "fever_max 38-43 after delivery-numeric result",
+            "new_column_name": "Postpartum_fever_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'Postpartum_fever_yes_or_no' as 1 if 'fever_max 38-43 after delivery-numeric result' is not empty (indicating fever), else 0."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "type of labor onset",
+            "words_dict": {
+                "1": ["ירידת מים", "ספונטני"],
+                "2": ["ניסיון היפוך", "השראת לידה - פקיעת מים", "השראת לידה", "PG", "הבשלת צוואר", "אוגמנטציה - פיטוצין", "אוגמנטציה"],
+                "3": ["הבשלת צואר - בלון"],
+                "4": ["ניתוח קיסרי"],
+                "5": ["אינה בלידה", "אחר"],
+                "6": ["Misoprostol", "Termination of pregnancy"]
+            },
+            "default_value": "Other"
+        },
+        "_description": "Categorizes 'type of labor onset' based on keywords into predefined numerical categories (1-6) or 'Other'."
+    },
+    {
+        "name": "compare_values",
+        "params": {
+            "column_name": "type of labor onset",
+            "new_column_name": "Spontaneous_delivery_yes/no",
+            "target_value": 1,
+            "match_return": 1,
+            "no_match_return": 0
+        },
+        "_description": "Flags 'Spontaneous_delivery_yes/no' as 1 if 'type of labor onset' is category 1 (Spontaneous), else 0."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "complications-value textual",
+            "words_dict": {
+                "0": ["לא"],
+                "1": ["כן"]
+            },
+            "default_value": "Other"
+        },
+        "_description": "Categorizes 'complications-value textual' into 0 (No) or 1 (Yes) based on keywords."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "amniofusion-non-numeric result",
+            "words_dict": {
+                "1": ["בוצע", "בוצע עי דר הראל", "הוכנס על ידי דר ברט"]
+            },
+            "default_value": "Other",
+            "empty_value": "0"
+        },
+        "_description": "Categorizes 'amniofusion-non-numeric result' into 1 (Performed) or 'Other', with empty values as 0."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "surgery reports-surgery date-weekday",
+            "words_dict": {
+                "1": ["Sunday"],
+                "2": ["Monday"],
+                "3": ["Tuesday"],
+                "4": ["Wednesday"],
+                "5": ["Thursday"],
+                "6": ["Friday"],
+                "7": ["Saturday"]
+            },
+            "default_value": "Other",
+            "empty_value": ""
+        },
+        "_description": "Categorizes 'surgery reports-surgery date-weekday' into numerical days (1-7) or 'Other'."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "surgery info-procedure",
+            "words_dict": {
+                "2": ["HIGH TRANSVERSE"],
+                "3": ["CESAREAN HYSTERECTOMY", "CESAREAN DELIVERY AND HYSTERECTOMY"],
+                "4": ["CLASSICAL"],
+                "5": ["INVERTED T INCISION "],
+                "1": ["LSCS", "LOW SEGMENT", "CESAREAN DELIVERY L.S.C.S", "CESAREAN SECTION"]
+            },
+            "default_value": "Other",
+            "empty_value": ""
+        },
+        "_description": "Categorizes 'surgery info-procedure' into numerical types (1-5) or 'Other'."
+    },
+    {
+        "name": "compare_values",
+        "params": {
+            "column_name": "surgery info-procedure",
+            "new_column_name": "Cesarean_Hysterectomy yes/no",
+            "target_value": 3,
+            "match_return": 1,
+            "no_match_return": 0
+        },
+        "_description": "Flags 'Cesarean_Hysterectomy yes/no' as 1 if 'surgery info-procedure' is category 3 (Cesarean Hysterectomy), else 0."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "rom description-amniotic fluid color",
+            "words_dict": {
+                "0": ["נקיים", "דמיים", "לא נצפו מים", "no value"],
+                "1": ["מקוניום", "מקוניום דליל", "מקוניום סמיך"]
+            },
+            "default_value": "Other"
+        },
+        "_description": "Categorizes 'rom description-amniotic fluid color' into 0 (Clear/Bloody/No fluid) or 1 (Meconium) or 'Other'."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "rom description-membranes rupture type",
+            "words_dict": {
+                "0": ["קרומים נפקעו עצמונית", "לא נפקעו עד ללידה", "לא נמושו קרומים", "זמן פקיעת הקרומים לא ידוע", "No value"],
+                "1": ["קרומים נפקעו מכשירנית", "נפקעו לאחר בדיקה וגינלית", "נפקעו במהלך בדיקה וגינלית", "AROM"]
+            },
+            "default_value": "Other"
+        },
+        "_description": "Categorizes 'rom description-membranes rupture type' into 0 (Spontaneous/Intact) or 1 (Artificial Rupture) or 'Other'."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "gbs status-gbs in urine",
+            "words_dict": {
+                "0": ["שלילי"],
+                "1": ["חיובי"],
+                "2": ["לא נבדק", "no value", "צמיחה מעורבת"]
+            },
+            "default_value": "Other"
+        },
+        "_description": "Categorizes 'gbs status-gbs in urine' into 0 (Negative), 1 (Positive), or 2 (Not Tested/Mixed Growth)."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "gbs status-gbs vagina",
+            "words_dict": {
+                "0": ["שלילי"],
+                "1": ["חיובי"],
+                "2": ["לא נבדק", "no value", "צמיחה מעורבת"]
+            },
+            "default_value": "Other"
+        },
+        "_description": "Categorizes 'gbs status-gbs vagina' into 0 (Negative), 1 (Positive), or 2 (Not Tested/Mixed Growth)."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "gbs diagnosis-diagnosis",
+            "words_dict": {
+                "1": ["gbs +", "gbs carrier", "gbs carrier (v02.51)"]
+            },
+            "default_value": "Other",
+            "empty_value": "2"
+        },
+        "_description": "Categorizes 'gbs diagnosis-diagnosis' into 1 (GBS Positive/Carrier) or 'Other', with empty values as 2."
+    },
+    {
+        "name": "custom_logic_operation",
+        "params": {
+            "col1_name": "gbs diagnosis-diagnosis",
+            "col2_name": "gbs status-gbs vagina",
+            "result_col_name": "GBS_vaginal_Result"
+        },
+        "_description": "Applies custom logic to combine GBS diagnosis and vaginal status into a single result column."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "transfer to icu-department",
+            "words_dict": {
+                "1": ["טיפול נמרץ כללי", "יחידת טראומה"]
+            },
+            "default_value": "Other",
+            "empty_value": "0"
+        },
+        "_description": "Categorizes 'transfer to icu-department' into 1 (ICU/Trauma) or 'Other', with empty values as 0."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "readmission-admitting department",
+            "words_dict": {
+                "1": ["גינקולוגיה", "יולדות א", "יולדות ב"],
+                "2": ["א.א.ג ניתוחי ראש וצוואר", "אורולוגיה", "השהיה מלרד", "כירורגית ב", "כירורגית ג", "מלונית", "נוירולוגיה", "פנימית ו", "פנימית ט", "אונקולוגית", "פנימית א", "פנימית ד", "פנימית ג", "שרות שיקום מרחוק תנועה"]
+            },
+            "default_value": "Other",
+            "empty_value": "0"
+        },
+        "_description": "Categorizes 'readmission-admitting department' into 1 (OBGYN), 2 (Other Medical), or 'Other', with empty values as 0."
+    },
+    {
+        "name": "compare_values",
+        "params": {
+            "column_name": "readmission-admitting department",
+            "new_column_name": "readmission_OBGYN_yes/no",
+            "target_value": 1,
+            "match_return": 1,
+            "no_match_return": 0
+        },
+        "_description": "Flags 'readmission_OBGYN_yes/no' as 1 if readmitted to OBGYN department, else 0."
+    },
+    {
+        "name": "compare_values",
+        "params": {
+            "column_name": "readmission-admitting department",
+            "new_column_name": "readmission_Other_yes/no",
+            "target_value": 2,
+            "match_return": 1,
+            "no_match_return": 0
+        },
+        "_description": "Flags 'readmission_Other_yes/no' as 1 if readmitted to other medical department, else 0."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "neuraxial analgesia-anesthesia type",
+            "words_dict": {
+                "0": ["ללא הרדמה", "מקומית", "כללית"],
+                "1": ["אפידורלית", "אפידורלית+כללית", "ספינלית", "ספינלית+כללית"]
+            },
+            "default_value": "Other"
+        },
+        "_description": "Categorizes 'neuraxial analgesia-anesthesia type' into 0 (No/Local/General) or 1 (Epidural/Spinal) or 'Other'."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "cs info-main indication",
+            "words_dict": {
+                "1": ["Breech Presentation", "Brow Presentation", "Cord Presentation", "Face Presentation", "Malpresentation", "Transverse/Oblique Lie", "Twins - First Non-Vertex"],
+                "2": ["Non Reassuring Fetal Monitor"],
+                "3": ["Arrest of dilatation", "Dysfunctional Labour", "Failed Induction", "Failure of descent", "No progress", "Susp. CPD", "Failed Vacuum Extraction", "Failed Forceps extraction"],
+                "4": ["MATERNAL REQUEST", "Maternal Exhaustion"],
+                "5": ["Prev. C.S. - Patient`s Request", "Previous Uterine Scar", "S/P Myomectomy"],
+                "6": ["Macrosomia"],
+                "7": ["Fetal Thrombocytopenia", "Marginal placenta", "Multiple Pregnancy", "Other Indication", "Past Shoulder Dystocia", "Placenta Accreta", "Placenta previa", "Prolapse of Cord", "S/P Tear III/IV degree", "Susp. Uterine Rupture", "Suspected Placental Abruption", "Suspected Vasa Previa", "TWINS PREGNANCY", "Genital Herpes", "Tumor Previa", "Triplet pregnancy"]
+            },
+            "default_value": "Other"
+        },
+        "_description": "Categorizes 'cs info-main indication' into numerical types (1-7) or 'Other'."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "cs info-secondary indication",
+            "words_dict": {
+                "1": ["Breech Presentation", "Brow Presentation", "Cord Presentation", "Face Presentation", "Malpresentation", "Transverse/Oblique Lie", "Twins - First Non-Vertex"],
+                "2": ["Non Reassuring Fetal Monitor"],
+                "3": ["Arrest of dilatation", "Dysfunctional Labour", "Failed Induction", "Failure of descent", "No progress", "Susp. CPD", "Failed Vacuum Extraction", "Failed Forceps extraction"],
+                "4": ["MATERNAL REQUEST", "Maternal Exhaustion"],
+                "5": ["Prev. C.S. - Patient`s Request", "Previous Uterine Scar", "S/P Myomectomy"],
+                "6": ["Macrosomia"],
+                "7": ["Fetal Thrombocytopenia", "Marginal placenta", "Multiple Pregnancy", "Other Indication", "Past Shoulder Dystocia", "Placenta Accreta", "Placenta previa", "Prolapse of Cord", "S/P Tear III/IV degree", "Susp. Uterine Rupture", "Suspected Placental Abruption", "Suspected Vasa Previa", "TWINS PREGNANCY", "Genital Herpes", "Tumor Previa", "Triplet pregnancy"]
+            },
+            "default_value": "Other"
+        },
+        "_description": "Categorizes 'cs info-secondary indication' into numerical types (1-7) or 'Other'."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "cs info-type of surgery",
+            "words_dict": {
+                "1": ["אלקטיבי", "סמי-אלקטיבי"],
+                "3": ["דחוף", "בהול"]
+            },
+            "default_value": "Other",
+            "empty_value": ""
+        },
+        "_description": "Categorizes 'cs info-type of surgery' into 1 (Elective/Semi-Elective) or 3 (Urgent/Emergency) or 'Other'."
+    },
+    {
+        "name": "compare_values",
+        "params": {
+            "column_name": "cs info-type of surgery",
+            "new_column_name": "Elective_CS_yes/no",
+            "target_value": 1,
+            "match_return": 1,
+            "no_match_return": 0
+        },
+        "_description": "Flags 'Elective_CS_yes/no' as 1 if Cesarean Section was Elective/Semi-Elective, else 0."
+    },
+    {
+        "name": "compare_values",
+        "params": {
+            "column_name": "cs info-type of surgery",
+            "new_column_name": "Urgent_CS_yes/no",
+            "target_value": 3,
+            "match_return": 1,
+            "no_match_return": 0
+        },
+        "_description": "Flags 'Urgent_CS_yes/no' as 1 if Cesarean Section was Urgent/Emergency, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "hemostasis-code",
+            "new_column_name": "hemostasis_yes/no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'hemostasis_yes/no' as 1 if hemostasis code is present, else 0."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "hemostasis-code",
+            "words_dict": {
+                "1": ["FIBRILLAR"],
+                "2": ["NU_KNIT"],
+                "3": ["SURGICEL"]
+            },
+            "default_value": "Other",
+            "empty_value": "0"
+        },
+        "_description": "Categorizes 'hemostasis-code' into 1 (Fibrillar), 2 (Nu-Knit), 3 (Surgicel) or 'Other', with empty values as 0."
+    },
+    {
+        "name": "flag_if_column_contains_any_value",
+        "params": {
+            "column_name": "augmentation meds-medication",
+            "target_values": ["MISOPROSTOL"],
+            "result_col": "misoprostol_yes/no"
+        },
+        "_description": "Flags 'misoprostol_yes/no' as 1 if 'augmentation meds-medication' contains 'MISOPROSTOL', else 0."
+    },
+    {
+        "name": "flag_if_column_contains_any_value",
+        "params": {
+            "column_name": "augmentation meds-medication",
+            "target_values": ["OXYTOCIN"],
+            "result_col": "pitocin_yes/no"
+        },
+        "_description": "Flags 'pitocin_yes/no' as 1 if 'augmentation meds-medication' contains 'OXYTOCIN', else 0."
+    },
+    {
+        "name": "flag_if_column_contains_any_value",
+        "params": {
+            "column_name": "balloon/propes-measurement",
+            "target_values": ["פרופס"],
+            "result_col": "propes_yes/no"
+        },
+        "_description": "Flags 'propes_yes/no' as 1 if 'balloon/propes-measurement' contains 'פרופס', else 0."
+    },
+    {
+        "name": "flag_if_column_contains_any_value",
+        "params": {
+            "column_name": "balloon/propes-measurement",
+            "target_values": ["בלון"],
+            "result_col": "balloon_yes/no"
+        },
+        "_description": "Flags 'balloon_yes/no' as 1 if 'balloon/propes-measurement' contains 'בלון', else 0."
+    },
+    {
+        "name": "columns_contain_nonzero_nonfalse",
+        "params": {
+            "column_names": ["propes_yes/no", "misoprostol_yes/no"],
+            "result_col": "induction_yes/no"
+        },
+        "_description": "Flags 'induction_yes/no' as 1 if either 'propes_yes/no' or 'misoprostol_yes/no' is non-zero/non-false, else 0."
+    },
+    {
+        "name": "clear_strings_multiple_columns",
+        "params": {
+            "column_names": ["surgical complications-procedure"],
+            "words": ["TRACHEOSTOMY", "APPENDECTOMY", "CHOLECYSTECTOMY", "PERIANAL ABSCESS", "EXAMINATION UNDER ANESTHESIA"],
+            "indicator": 0
+        },
+        "_description": "Clears specific surgical procedure strings from 'surgical complications-procedure' column."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "surgical complications-procedure",
+            "new_column_name": "surgical_complication_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'surgical_complication_yes_or_no' as 1 if 'surgical complications-procedure' is not empty, else 0."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "surgical complications-procedure",
+            "words_dict": {
+                "1": ["colectomy", "colostomy", "enterolysis", "PANCREATECTOMY", "ileocolic"],
+                "2": ["debridement", "DEBRIDMENT"],
+                "3": ["cystoscopy", "URETEROSCOPY", "rirs", "BLADDER", "UROGRAPHY", "URETEROSCOPY"],
+                "4": ["laparoscopy", "laparotomy"]
+            },
+            "default_value": "Other",
+            "empty_value": "0"
+        },
+        "_description": "Categorizes 'surgical complications-procedure' into GI (1), Soft Tissue (2), Urinary (3), Exploratory (4) or 'Other', with empty values as 0."
+    },
+    {
+        "name": "compare_values",
+        "params": {
+            "column_name": "parity - birth number",
+            "new_column_name": "nulliparous_yesno",
+            "target_value": 1,
+            "match_return": 1,
+            "no_match_return": 0
+        },
+        "_description": "Flags 'nulliparous_yesno' as 1 if 'parity - birth number' is 1 (nulliparous), else 0."
+    },
+    {
+        "name": "filter_numbers",
+        "params": {
+            "column_name": "bmi-numeric result",
+            "lowerThan": 15,
+            "higherThan": 61
+        },
+        "_description": "Filters 'bmi-numeric result' to keep values between 15 and 61 (inclusive)."
+    },
+    {
+        "name": "flip_sign",
+        "params": {
+            "column_name": "rom description-date of membranes rupture-hours from reference"
+        },
+        "_description": "Flips the sign of numeric values in 'rom description-date of membranes rupture-hours from reference'."
+    },
+    {
+        "name": "filter_numbers",
+        "params": {
+            "column_name": "rom description-date of membranes rupture-hours from reference",
+            "lowerThan": 0,
+            "higherThan": 2500
+        },
+        "_description": "Filters 'rom description-date of membranes rupture-hours from reference' to keep values between 0 and 2500 (inclusive)."
+    },
+    {
+        "name": "multiply_by_number",
+        "params": {
+            "column_name": "second stage length",
+            "multiplier": 24
+        },
+        "_description": "Multiplies 'second stage length' by 24 (converts days to hours)."
+    },
+    {
+        "name": "cutoff_number",
+        "params": {
+            "column_name": "second stage length",
+            "new_column_name": "duration_of_2nd_stage_over_4h",
+            "cutoff": 4,
+            "above": 1,
+            "below": 0,
+            "empty_value": ""
+        },
+        "_description": "Flags 'duration_of_2nd_stage_over_4h' as 1 if 'second stage length' is >= 4 hours, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "maternal pregestaional diabetes-maternal pregestaional diabetes-diagnosis",
+            "new_column_name": "maternal_pregestational_diabetes_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'maternal_pregestational_diabetes_yes_or_no' as 1 if maternal pregestational diabetes diagnosis is present, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "maternal gestational diabetes-maternal gestational diabetes-diagnosis",
+            "new_column_name": "maternal_gestational_diabetes_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'maternal_gestational_diabetes_yes_or_no' as 1 if maternal gestational diabetes diagnosis is present, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "maternal pregestational hypertension-maternal pregestational hypertension-diagnosis",
+            "new_column_name": "maternal_pregestational_hypertension_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'maternal_pregestational_hypertension_yes_or_no' as 1 if maternal pregestational hypertension diagnosis is present, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "maternal gestational hypertension-maternal gestational hypertension-diagnosis",
+            "new_column_name": "maternal_gestational_hypertension_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'maternal_gestational_hypertension_yes_or_no' as 1 if maternal gestational hypertension diagnosis is present, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "maternal pph-diagnosis",
+            "new_column_name": "maternal_pph_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'maternal_pph_yes_or_no' as 1 if maternal PPH diagnosis is present, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "maternal vte_after delivery-diagnosis",
+            "new_column_name": "maternal vte_after_delivery_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'maternal vte_after_delivery_yes_or_no' as 1 if maternal VTE after delivery diagnosis is present, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "maternal vte_before delivery-diagnosis",
+            "new_column_name": "maternal vte_before_delivery_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'maternal vte_before_delivery_yes_or_no' as 1 if maternal VTE before delivery diagnosis is present, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "maternal infection post partum-diagnosis",
+            "new_column_name": "maternal_infection_post_partum_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'maternal_infection_post_partum_yes_or_no' as 1 if maternal infection postpartum diagnosis is present, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "hospitalization before delivery (hrp) - admission date",
+            "new_column_name": "HRP_hospitalization_prepartum_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'HRP_hospitalization_prepartum_yes_or_no' as 1 if HRP hospitalization before delivery is present, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "hospitalization before delivery_other - admission date",
+            "new_column_name": "other_hospitalization_prepartum_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'other_hospitalization_prepartum_yes_or_no' as 1 if other hospitalization before delivery is present, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "hospitalization after delivery_other-hospitalization after delivery - admitting department",
+            "new_column_name": "other_hospitalization_postpartum_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'other_hospitalization_postpartum_yes_or_no' as 1 if other hospitalization after delivery is present, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "pprom diagnosis-date of documentation",
+            "new_column_name": "PPROM_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'PPROM_yes_or_no' as 1 if PPROM diagnosis is present, else 0."
+    },
+    {
+        "name": "cutoff_number",
+        "params": {
+            "column_name": "rom description-date of membranes rupture-hours from reference",
+            "new_column_name": "duration_of_rom_over_18h",
+            "cutoff": 18,
+            "above": 1,
+            "below": 0,
+            "empty_value": ""
+        },
+        "_description": "Flags 'duration_of_rom_over_18h' as 1 if duration of rupture of membranes is over 18 hours, else 0."
+    },
+    {
+        "name": "cutoff_number",
+        "params": {
+            "column_name": "gestational age",
+            "new_column_name": "preterm_labor_yes_or_no",
+            "cutoff": 37,
+            "above": 0,
+            "below": 1,
+            "empty_value": ""
+        },
+        "_description": "Flags 'preterm_labor_yes_or_no' as 1 if gestational age is below 37 weeks (preterm), else 0."
+    },
+    {
+        "name": "cutoff_number",
+        "params": {
+            "column_name": "hospitalization before delivery (hrp) - length of stay (days)",
+            "new_column_name": "Pre-labor_HRP_over_3d_yes_or_no",
+            "cutoff": 3,
+            "above": 1,
+            "below": 0,
+            "empty_value": ""
+        },
+        "_description": "Flags 'Pre-labor_HRP_over_3d_yes_or_no' as 1 if HRP hospitalization before delivery is over 3 days, else 0."
+    },
+    {
+        "name": "cutoff_number",
+        "params": {
+            "column_name": "hospitalization before delivery_other - length of stay (days)",
+            "new_column_name": "Pre-labor_other_over_3d_yes_or_no",
+            "cutoff": 3,
+            "above": 1,
+            "below": 0,
+            "empty_value": ""
+        },
+        "_description": "Flags 'Pre-labor_other_over_3d_yes_or_no' as 1 if other hospitalization before delivery is over 3 days, else 0."
+    },
+    {
+        "name": "flip_sign",
+        "params": {
+            "column_name": "fever_max 38-43 before delivery-date of measurement-hours from reference"
+        },
+        "_description": "Flips the sign of numeric values in 'fever_max 38-43 before delivery-date of measurement-hours from reference'."
+    },
+    {
+        "name": "generate_heatmap_with_counts",
+        "params": {
+            "start_column": "organisms susceptability-antibiotic_1",
+            "columns_per_set": 6,
+            "num_tuples": 206,
+            "output_file": "heatmap.csv"
+        },
+        "_description": "Generates a heatmap of organism susceptibility counts and saves it to 'heatmap.csv'."
+    },
+    {
+        "name": "concat_values_across_batches",
+        "params": {
+            "nth_column": "antibiotics-medication_1",
+            "step_size": 3,
+            "num_batches": 108,
+            "output_column_name": "concat_antibiotics_given"
+        },
+        "_description": "Concatenates unique antibiotic medications given across batches into a single column."
+    },
+    {
+        "name": "detect_combination_antibiotics",
+        "params": {
+            "source_col": "concat_antibiotics_given",
+            "result_col_2plus": "has_2plus_abx",
+            "result_col_3plus": "has_3plus_abx",
+            "combos": [
+                ["AMPICILLIN", "GENTAMICIN"],
+                ["AMPICILLIN", "GENTAMYCIN"],
+                ["DALACIN", "GENTAMICIN"],
+                ["DALACIN", "GENTAMYCIN"],
+                ["CLINDAMYCIN", "GENTAMICIN"],
+                ["CLINDAMYCIN", "GENTAMYCIN"],
+                ["ROCEPHIN", "FLAGYL"],
+                ["CEFTRIAXONE", "FLAGYL"],
+                ["CefTRIAXone", "FLAGYL"],
+                ["ROCEPHIN", "METRONIDAZOLE"],
+                ["CEFTRIAXONE", "METRONIDAZOLE"],
+                ["CefTRIAXone", "METRONIDAZOLE"]
+            ],
+            "synonyms": [
+                ["AUGMENTIN BID", "AUGMENTIN"],
+                ["GENTAMICIN", "GENTAMYCIN"],
+                ["FLAGYL", "METRONIDAZOLE"],
+                ["ROCEPHIN", "CEFTRIAXONE", "CefTRIAXone"],
+                ["DALACIN", "CLINDAMYCIN"]
+            ],
+            "ignored": ["PENICILLIN", "PENICILLIN G SODIUM"]
+        },
+        "_description": "Detects combinations of antibiotics given, flagging if 2 or more, or 3 or more unique antibiotics were administered."
+    },
+    {
+        "name": "summarize_keys_and_values_in_raw_map",
+        "params": {
+            "input_column": "scrub-all row data",
+            "output_file": "key_value_summary.csv"
+        },
+        "_description": "Summarizes unique keys and values from raw map-like data in 'scrub-all row data' and saves to 'key_value_summary.csv'."
+    },
+    {
+        "name": "categorize_packed_cells",
+        "params": {
+            "before_col": "packed cells before-date administered-days from reference_1",
+            "after_col": "packed cells after-date administered-days from reference_1",
+            "step": 2,
+            "num_before_batches": 3,
+            "num_after_batches": 13,
+            "result_received": "packed_cells_received_yes_or_no",
+            "result_before": "packed_cells_before_count",
+            "result_after": "packed_cells_after_count"
+        },
+        "_description": "Categorizes packed cell transfusions (received, count before, count after) based on date references."
+    },
+    {
+        "name": "categorize_uterotonics",
+        "params": {
+            "base_col": "uterotonics-medication_1",
+            "step": 2,
+            "num_batches": 2,
+            "result_col": "uterotonics_received",
+            "cytotec_words": ["ציטוטק", "cytotec"],
+            "methergin_words": ["מטרגין", "methergin"]
+        },
+        "_description": "Categorizes uterotonic administration (Cytotec, Methergin, both, or none) based on medication keywords."
+    },
+    {
+        "name": "create_column_from_value_map",
+        "params": {
+            "source_column": "uterotonics_received",
+            "new_column": "uterotonics yes/no",
+            "value_map": {
+                "0": 0,
+                "1": 1,
+                "2": 1,
+                "3": 1
+            },
+            "default_value": ""
+        },
+        "_description": "Flags 'uterotonics yes/no' as 1 if any uterotonics were received, else 0."
+    },
+    {
+        "name": "categorize_full_dilation",
+        "params": {
+            "column": "full dilation at surgery-value numeric",
+            "result_col": "full_dilation_at_surgery_yes_or_no"
+        },
+        "_description": "Flags 'full_dilation_at_surgery_yes_or_no' as 1 if full dilation (value 10) was achieved at surgery, else 0."
+    },
+    {
+        "name": "categorize_surgery_time",
+        "params": {
+            "columns": ["surgery time-surgery start date time", "surgery time-documenting date", "חדר ניתוח גניקולוגי שעת ניתוח-שעת ניתוח-value textual", "surgery start-value textual"],
+            "result_col_label": "surgery_time_category_label",
+            "result_col_numeric": "surgery_time_category"
+        },
+        "_description": "Categorizes surgery time into 'Day', 'Evening', or 'Night' and assigns a numeric code."
+    },
+    {
+        "name": "calculate_duration",
+        "params": {
+            "start_column": "surgery start-value textual",
+            "end_column": "surgery end-value textual",
+            "result_column": "surgery_duration_hours"
+        },
+        "_description": "Calculates the duration of surgery in hours from start and end time columns."
+    },
+    {
+        "name": "process_length_of_stay",
+        "params": {
+            "room_col": "length of stay delivery room-department_1",
+            "entry_col": "length of stay delivery room-room enter date_1",
+            "exit_col": "length of stay delivery room-room exit date_1",
+            "step": 5,
+            "num_batches": 5,
+            "delivery_room_words": ["חדר לידה"],
+            "max_gap_minutes": 20,
+            "result_col": "delivery_room_stay_hours"
+        },
+        "_description": "Calculates the total length of the most recent continuous stay in a delivery room."
+    },
+    {
+        "name": "process_length_of_fever",
+        "params": {
+            "date_col": "count of fever over 38-date of measurement_1",
+            "temp_col": "count of fever over 38-numeric result_1",
+            "step": 3,
+            "num_batches": 130,
+            "result_col": "fever_sequences"
+        },
+        "_description": "Calculates consecutive fever sequences based on temperature and date measurements."
+    },
+    {
+        "name": "imaging_guided_drainage_detected",
+        "params": {
+            "static_col": "imaging_ first cti/usi-performed procedures",
+            "repeated_col": "imaging_ct/cti (first 10)-performed procedures_1",
+            "step_size": 4,
+            "num_steps": 6,
+            "keywords": ["CTI", "USI", "ניקוז"],
+            "result_col_name": "Imaging_Guided_Drainage yes/no",
+            "date_col_offset": -3,
+            "date_result_col_name": "first_drainage_days_from_ref"
+        },
+        "_description": "Flags imaging-guided drainage and extracts the date from reference."
+    },
+    {
+        "name": "apply_operation_on_columns",
+        "params": {
+            "col1_name": "hospitalization after delivery - length of stay (days)",
+            "col2_name": "first_drainage_days_from_ref",
+            "operation": "lambda a, b: a - b",
+            "result_col_name": "length_of_stay_after_CTI"
+        },
+        "_description": "Calculates length of stay after CTI by subtracting 'first_drainage_days_from_ref' from 'hospitalization after delivery - length of stay (days)'."
+    },
+    {
+        "name": "apply_operation_on_columns",
+        "params": {
+            "col1_name": "hospitalization after delivery - length of stay (days)",
+            "col2_name": "imaging_ct/cti (first 10)-exam start time-days from reference_1",
+            "operation": "lambda a, b: a - b",
+            "result_col_name": "length_of_stay_after_first_CT"
+        },
+        "_description": "Calculates length of stay after first CT by subtracting 'imaging_ct/cti (first 10)-exam start time-days from reference_1' from 'hospitalization after delivery - length of stay (days)'."
+    },
+    {
+        "name": "add_row_index_column",
+        "params": {
+            "col_name": "Patient_Index"
+        },
+        "_description": "Adds a 'Patient_Index' column (1-based row index) to the DataFrame."
+    },
+    {
+        "name": "check_disinfection_components",
+        "params": {
+            "text_col": "scrub-value textual",
+            "scrub_raw_data_col": "scrub-all row data",
+            "backup_col": "surgery reports-disinfection",
+            "result_col": "sufficient_disinfection_yes/no",
+            "keyword_dict": {
+                "chlorhexidine": ["כלורהקסידין", "Alcohol 70%+Chlorhexidine 0.5%"],
+                "scrub": ["septal scrub", "ספטל סקרב", "septal acrub", "Chlorhexidine 4%"],
+                "povidone": ["povidone", "polydine", "פולידין"]
+            }
+        },
+        "_description": "Checks for the presence of 3 disinfection components from various source columns and flags 'sufficient_disinfection_yes/no'."
+    },
+    {
+        "name": "find_closest_lab_value_by_datetime_batch",
+        "params": {
+            "start_col": "count of fever over 38-numeric result_1",
+            "step_size": 3,
+            "num_batches": 130,
+            "date_col_offset": -1,
+            "ct_time_col": "imaging_ct/cti (first 10)-exam start time-date",
+            "max_gap_hours_before": 12,
+            "result_col": "closest_fever",
+            "max_gap_hours_after": 12,
+            "batch": 6,
+            "result_offset": 3
+        },
+        "_description": "Finds the fever value closest to CT scan time within a 12-hour window (before/after) across multiple batches."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "closest_fever_1",
+            "new_column_name": "Fever_at_1st_CT_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'Fever_at_1st_CT_yes_or_no' as 1 if a fever was recorded at the time of the first CT, else 0."
+    },
+    {
+        "name": "find_closest_lab_value_batch",
+        "params": {
+            "start_col": "wbc (first 50)-numeric result_1",
+            "step_size": 2,
+            "num_batches": 15,
+            "date_col_offset": -1,
+            "ct_time_reference_col": "imaging_ct/cti (first 10)-exam start time-days from reference",
+            "max_gap_hours_before": 24,
+            "result_col": "closest_WBC",
+            "max_gap_hours_after": 12,
+            "batch": 6,
+            "result_offset": 4
+        },
+        "_description": "Finds the WBC value closest to CT scan time within a 24-hour window (before) and 12-hour window (after) across multiple batches."
+    },
+    {
+        "name": "find_closest_lab_value_batch",
+        "params": {
+            "start_col": "crp (first 50)-numeric result_1",
+            "step_size": 2,
+            "num_batches": 15,
+            "date_col_offset": -1,
+            "ct_time_reference_col": "imaging_ct/cti (first 10)-exam start time-days from reference",
+            "max_gap_hours_before": 24,
+            "result_col": "closest_CRP",
+            "max_gap_hours_after": 12,
+            "batch": 6,
+            "result_offset": 4
+        },
+        "_description": "Finds the CRP value closest to CT scan time within a 24-hour window (before) and 12-hour window (after) across multiple batches."
+    },
+    {
+        "name": "find_closest_lab_value_batch",
+        "params": {
+            "start_col": "plt (first 50)-numeric result_1",
+            "step_size": 2,
+            "num_batches": 15,
+            "date_col_offset": -1,
+            "ct_time_reference_col": "imaging_ct/cti (first 10)-exam start time-days from reference",
+            "max_gap_hours_before": 24,
+            "result_col": "closest_PLT",
+            "max_gap_hours_after": 12,
+            "batch": 6,
+            "result_offset": 4
+        },
+        "_description": "Finds the PLT value closest to CT scan time within a 24-hour window (before) and 12-hour window (after) across multiple batches."
+    },
+    {
+        "name": "flag_infectious_indication_from_free_text_batch",
+        "params": {
+            "column_name": "imaging_ct/cti (first 10)-interpretation",
+            "infectious_phrases": ["פקקת", "טרומבוזיס", "טרומבוסיס", "OVT", "ovarian vein thrombosis"],
+            "negation_prefixes": ["ללא", "אין", "not", "no", "doesn’t", "לא נראה", "לא", "בשאלה"],
+            "result_col": "Imaging_OVT_Yes_No",
+            "snippet_col": "Imaging_OVT_Yes_No_Reason",
+            "batch": 6,
+            "result_offset": 2
+        },
+        "_description": "Flags 'Imaging_OVT_Yes_No' if ovarian vein thrombosis is indicated in CT interpretation, considering negations."
+    },
+    {
+        "name": "flag_infectious_indication_from_free_text_batch",
+        "params": {
+            "column_name": "imaging_ct/cti (first 10)-interpretation",
+            "infectious_phrases": ["פגיעה במעי"],
+            "negation_prefixes": ["ללא", "אין", "not", "no", "doesn’t", "לא", "נשלל", "נשללה", "בשאלה"],
+            "result_col": "Imaging_Intestine_Yes_No",
+            "snippet_col": "Imaging_Intestine_Yes_No_Reason",
+            "batch": 6,
+            "result_offset": 2
+        },
+        "_description": "Flags 'Imaging_Intestine_Yes_No' if intestinal injury is indicated in CT interpretation, considering negations."
+    },
+    {
+        "name": "flag_infectious_indication_from_free_text_batch",
+        "params": {
+            "column_name": "imaging_ct/cti (first 10)-interpretation",
+            "infectious_phrases": ["פגיעה באורטר", "פגיעה בשופכן", "שופכן", "אורטר", "פגיעה בדרכי שתן"],
+            "negation_prefixes": ["ללא", "אין", "not", "no", "doesn’t", "לא", "נשלל", "נשללה", "בשאלה", "שלילת"],
+            "result_col": "Imaging_ureter_Yes_No",
+            "snippet_col": "Imaging_ureter_Yes_No_Reason",
+            "batch": 6,
+            "result_offset": 2
+        },
+        "_description": "Flags 'Imaging_ureter_Yes_No' if ureter/urinary tract injury is indicated in CT interpretation, considering negations."
+    },
+    {
+        "name": "flag_infectious_indication_from_free_text_batch",
+        "params": {
+            "column_name": "imaging_ct/cti (first 10)-interpretation",
+            "infectious_phrases": ["אפנדציטיס", "אפנדציט", "תוספתן"],
+            "negation_prefixes": ["ללא", "אין", "not", "no", "doesn’t", "לא", "נשלל", "נשללה", "בשאלה", "שלילת"],
+            "result_col": "Imaging_Appendicitis_Yes_No",
+            "snippet_col": "Imaging_Appendicitis_Yes_No_Reason",
+            "batch": 6,
+            "result_offset": 2
+        },
+        "_description": "Flags 'Imaging_Appendicitis_Yes_No' if appendicitis is indicated in CT interpretation, considering negations."
+    },
+    {
+        "name": "extract_sentences_containing_words_batch",
+        "params": {
+            "column_name": "imaging_ct/cti (first 10)-interpretation",
+            "keywords": ["קולקציה", "אבצס"],
+            "negation_prefixes": ["ללא", "אין", "not", "no", "doesn’t", "לא נראה", "לא"],
+            "result_column_name": "Imaging_Collection_Sentences_Extracted",
+            "batch": 6,
+            "result_offset": 2
+        },
+        "_description": "Extracts sentences containing 'קולקציה' or 'אבצס' from CT interpretation, considering negations."
+    },
+    {
+        "name": "flag_infectious_indication_from_free_text_batch",
+        "params": {
+            "column_name": "imaging_ct/cti (first 10)-interpretation",
+            "infectious_phrases": ["חום", "חומים", "פקקת", "דלקת", "אבצס", "אבסס", "מורסה", "קולקציה", "מזוהמת", "זיהום", "OVT", "abscess", "fever", "inflammation", "collection"],
+            "negation_prefixes": ["ללא", "אין", "not", "no", "doesn’t", "לא נראה", "לא"],
+            "result_col": "Imaging_Infectious_Reason",
+            "snippet_col": "Infectious_Reason_Snippet",
+            "partialMatch": true,
+            "batch": 6,
+            "result_offset": 2
+        },
+        "_description": "Flags 'Imaging_Infectious_Reason' if infectious indications are present in CT interpretation, considering negations and partial matches."
+    },
+    {
+        "name": "detect_multiple_antibiotics",
+        "params": {
+            "source_col": "concat_antibiotics_given",
+            "result_col_2plus": "has_multiple_antibiotics",
+            "result_col_3plus": "has_3plus_abx",
+            "combos": [
+                ["AMPICILLIN", "GENTAMICIN"],
+                ["AMPICILLIN", "GENTAMYCIN"],
+                ["DALACIN", "GENTAMICIN"],
+                ["DALACIN", "GENTAMYCIN"],
+                ["CLINDAMYCIN", "GENTAMICIN"],
+                ["CLINDAMYCIN", "GENTAMYCIN"],
+                ["ROCEPHIN", "FLAGYL"],
+                ["CEFTRIAXONE", "FLAGYL"],
+                ["CefTRIAXone", "FLAGYL"],
+                ["ROCEPHIN", "METRONIDAZOLE"],
+                ["CEFTRIAXONE", "METRONIDAZOLE"],
+                ["CefTRIAXone", "METRONIDAZOLE"]
+            ],
+            "synonyms": [
+                ["AUGMENTIN BID", "AUGMENTIN"],
+                ["GENTAMICIN", "GENTAMYCIN"],
+                ["FLAGYL", "METRONIDAZOLE"],
+                ["ROCEPHIN", "CEFTRIAXONE", "CefTRIAXone"],
+                ["DALACIN", "CLINDAMYCIN"]
+            ],
+            "ignored": ["PENICILLIN", "PENICILLIN G SODIUM"]
+        },
+        "_description": "Detects if multiple unique antibiotics (2+ or 3+) were given based on concatenated antibiotic list, handling synonyms and ignored drugs."
+    },
+    {
+        "name": "flag_antibiotic_change_due_to_growth",
+        "params": {
+            "culture_time_col": "blood cultures-collection date-days from reference_1",
+            "organism_offset": -1,
+            "culture_step": 4,
+            "culture_batches": 50,
+            "antibiotic_name_col": "antibiotics-medication_1",
+            "antibiotic_time_offset": -2,
+            "antibiotic_step": 3,
+            "antibiotic_batches": 108,
+            "result_col": "antibiotic_change_due_to_blood_growth",
+            "debug_col": "antibiotic_change_due_to_blood_growth_debug"
+        },
+        "_description": "Flags if antibiotic treatment changed following a blood culture growth, and provides debug information."
+    },
+    {
+        "name": "flag_antibiotic_change_due_to_growth",
+        "params": {
+            "culture_time_col": "other cultures-collection date-days from reference_1",
+            "organism_offset": 1,
+            "culture_step": 3,
+            "culture_batches": 13,
+            "antibiotic_name_col": "antibiotics-medication_1",
+            "antibiotic_time_offset": -2,
+            "antibiotic_step": 3,
+            "antibiotic_batches": 108,
+            "result_col": "antibiotic_change_due_to_other_growth",
+            "debug_col": "antibiotic_change_due_to_other_growth_debug"
+        },
+        "_description": "Flags if antibiotic treatment changed following an other culture growth, and provides debug information."
+    },
+    {
+        "name": "concatenate_unique_batches_by_column",
+        "params": {
+            "start_col": "surgery after delivery-date of procedure-days from reference_1",
+            "step_size": 4,
+            "num_batches": 7,
+            "element_position": 3,
+            "result_col": "postpartum_surgeries_names",
+            "dedup_columns": [1, 2]
+        },
+        "_description": "Concatenates unique postpartum surgery names from batches, deduplicating based on procedure and date."
+    },
+    {
+        "name": "update_column_with_values",
+        "params": {
+            "column_name": "postpartum_surgeries_names",
+            "words_dict": {
+                "1": ["hysterectomy"],
+                "2": ["drainage", "debridment", "DEBRIDEMENT"],
+                "3": ["enterolysis", "colectomy", "adhesions"],
+                "4": ["laparotomy"],
+                "5": ["Laparoscopy"]
+            },
+            "default_value": "Other",
+            "empty_value": ""
+        },
+        "_description": "Categorizes postpartum surgery names into specific types (hysterectomy, drainage, GI/GU, laparotomy, laparoscopy) or 'Other'."
+    },
+    {
+        "name": "compare_values",
+        "params": {
+            "column_name": "postpartum_surgeries_names",
+            "new_column_name": "postpartum_hysterectomy yes/no",
+            "target_value": 1,
+            "match_return": 1,
+            "no_match_return": 0
+        },
+        "_description": "Flags 'postpartum_hysterectomy yes/no' as 1 if postpartum hysterectomy was performed, else 0."
+    },
+    {
+        "name": "compare_values",
+        "params": {
+            "column_name": "postpartum_surgeries_names",
+            "new_column_name": "laparotomy yes/no",
+            "target_value": 4,
+            "match_return": 1,
+            "no_match_return": 0
+        },
+        "_description": "Flags 'laparotomy yes/no' as 1 if laparotomy was performed, else 0."
+    },
+    {
+        "name": "compare_values",
+        "params": {
+            "column_name": "postpartum_surgeries_names",
+            "new_column_name": "laparoscopy yes/no",
+            "target_value": 5,
+            "match_return": 1,
+            "no_match_return": 0
+        },
+        "_description": "Flags 'laparoscopy yes/no' as 1 if laparoscopy was performed, else 0."
+    },
+    {
+        "name": "columns_contain_nonzero_nonfalse",
+        "params": {
+            "column_names": ["laparotomy yes/no", "laparoscopy yes/no"],
+            "result_col": "surgical_drainage_yes/no"
+        },
+        "_description": "Flags 'surgical_drainage_yes/no' as 1 if either laparotomy or laparoscopy was performed, else 0."
+    },
+    {
+        "name": "compare_values",
+        "params": {
+            "column_name": "postpartum_surgeries_names",
+            "new_column_name": "GI or GU surgery yes/no",
+            "target_value": 3,
+            "match_return": 1,
+            "no_match_return": 0
+        },
+        "_description": "Flags 'GI or GU surgery yes/no' as 1 if GI or GU surgery was performed, else 0."
+    },
+    {
+        "name": "compare_values",
+        "params": {
+            "column_name": "postpartum_surgeries_names",
+            "new_column_name": "soft tissue surgery yes/no",
+            "target_value": 2,
+            "match_return": 1,
+            "no_match_return": 0
+        },
+        "_description": "Flags 'soft tissue surgery yes/no' as 1 if soft tissue surgery was performed, else 0."
+    },
+    {
+        "name": "is_empty",
+        "params": {
+            "column_name": "postpartum_surgeries_names",
+            "new_column_name": "postpartum_surgery_yes_or_no",
+            "value_empty": 0,
+            "value_not_empty": 1
+        },
+        "_description": "Flags 'postpartum_surgery_yes_or_no' as 1 if any postpartum surgery was performed, else 0."
+    },
+    {
+        "name": "split_gestational_age",
+        "params": {
+            "column_name": "gestational age",
+            "week_col": "gestational_week",
+            "day_col": "gestational_day"
+        },
+        "_description": "Splits 'gestational age' into 'gestational_week' and 'gestational_day' columns."
+    },
+    {
+        "name": "sum_two_columns_threshold",
+        "params": {
+            "col1_name": "packed_cells_before_count",
+            "col2_name": "packed_cells_after_count",
+            "new_column_name": "multiple packed cells (4 and above) yes/no",
+            "threshold": 4,
+            "above_value": 1,
+            "below_value": 0,
+            "default_value": ""
+        },
+        "_description": "Flags 'multiple packed cells (4 and above) yes/no' as 1 if total packed cells (before + after) is 4 or more, else 0."
+    },
+    {
+        "name": "remove_columns",
+        "params": {
+            "column_names": [
+                "reference occurrence number",
+                "date of birth~date of death - days from delivery",
+                "date of first documentation - birth occurence",
+                "has imaging (first ct/cti)-exam start time-days from reference",
+                "imaging_ct/cti (first 10)-performed procedures_1",
+                "imaging_ct/cti (first 10)-performed procedures_2",
+                "imaging_ct/cti (first 10)-performed procedures_3",
+                "imaging_ct/cti (first 10)-performed procedures_4",
+                "imaging_ct/cti (first 10)-performed procedures_5",
+                "imaging_ct/cti (first 10)-performed procedures_6",
+                "fetus count",
+                "type of labor onset",
+                "gestational age",
+                "has imaging (first ct/cti)-exam start time-date~imaging_ first cti/usi-performed procedures",
+                "amniofusion-date of measurement-days from reference",
+                "hemostasis-value numeric",
+                "hemostasis-code",
+                "cs info-date of documentation~cs info-secondary indication",
+                "scrub-value textual~surgery reports-documenting date",
+                "packed cells before-date administered-days from reference_1~packed cells after-medication_13",
+                "uterotonics-date administered-days from reference_1~uterotonics-medication_2",
+                "surgery time-surgery start date time~surgery reports-surgery date-hours from reference",
+                "surgery reports-complications during surgery~surgery reports-disinfection",
+                "full dilation at surgery-value numeric~surgery info-date of procedure",
+                "hospitalization before delivery (hrp) - admission date",
+                "hospitalization before delivery (hrp) - discharge date~hospitalization before delivery_other - admission date",
+                "hospitalization before delivery_other - discharge date~hospitalization after delivery - admission date",
+                "hospitalization after delivery - discharge date~hospitalization after delivery_other-hospitalization after delivery - admitting department",
+                "hospitalization after delivery_other-hospitalization after delivery - discharge date~length of stay delivery room-room exit - hours from reference_5",
+                "transfer to icu-department admission date~transfer to icu-department discharge date",
+                "readmission-hospital admission date",
+                "readmission-hospital discharge date-days from reference~readmission-hospital discharge date",
+                "second stage timeline-time of full dilation",
+                "fever_max 38-43 before delivery-date of measurement",
+                "count of fever over 38-date of measurement_1~count of fever over 38-department_130",
+                "fever_max 38-43 after delivery-date of measurement",
+                "pprom diagnosis-date of documentation",
+                "pprom diagnosis-diagnosis",
+                "maternal pregestational hypertension-maternal pregestational hypertension-diagnosis~maternal infection post partum-diagnosis",
+                "crp at 1st imaging 24h-collection date-hours from reference",
+                "plt at 1st imaging 24h-collection date-hours from reference",
+                "wbc at 1st imaging 24h-collection date-hours from reference",
+                "crp (first 50)-collection date-days from reference_1~wbc (first 50)-numeric result_50",
+                "blood cultures-organism detected_1~organisms susceptability-susceptibility value_206",
+                "antibiotics-date administered-days from reference_1~antibiotics-medication_108",
+                "surgery_time_category_label",
+                "surgical complications-procedure~surgery after delivery-department_7",
+                "readmission-admitting department",
+                "augmentation meds-medication",
+                "balloon/propes-measurement",
+                "gbs status-gbs in urine~gbs diagnosis-diagnosis",
+                "has_multiple_antibiotics",
+                "postpartum_surgeries_names"
+            ]
+        },
+        "_description": "Removes a comprehensive list of columns, including single columns and ranges, to clean up the dataset."
+    },
+    {
+        "name": "add_row_index_column",
+        "params": {
+            "col_name": "Patient_Index"
+        },
+        "_description": "Adds a 'Patient_Index' column (1-based row index) to the DataFrame."
+    }
+]
