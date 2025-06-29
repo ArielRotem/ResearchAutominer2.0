@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Paper, Typography, List, ListItem, ListItemText, Select, MenuItem, FormControl, InputLabel, TextField, Box, IconButton, Tooltip, Switch, FormControlLabel } from '@mui/material';
+import { Button, Paper, Typography, List, ListItem, ListItemText, Select, MenuItem, FormControl, InputLabel, TextField, Box, IconButton, Tooltip, Switch, FormControlLabel, CircularProgress } from '@mui/material';
 import { AddCircleOutline, RemoveCircleOutline, Info as InfoIcon } from '@mui/icons-material';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import axios from 'axios';
@@ -15,9 +15,15 @@ const ManuscriptEditor: React.FC<ManuscriptEditorProps> = ({ manuscript, setManu
   const [selectedFunction, setSelectedFunction] = useState<string>("");
   const [manuscriptName, setManuscriptName] = useState<string>("");
   const [savedManuscripts, setSavedManuscripts] = useState<string[]>([]);
+  const [loadingFunctions, setLoadingFunctions] = useState<boolean>(true);
+  const [loadingManuscripts, setLoadingManuscripts] = useState<boolean>(true);
+  const [savingManuscript, setSavingManuscript] = useState<boolean>(false);
+  const [loadingSpecificManuscript, setLoadingSpecificManuscript] = useState<boolean>(false);
+  const [renderedStepsCount, setRenderedStepsCount] = useState<number>(0);
 
   useEffect(() => {
     const fetchFunctions = async () => {
+      setLoadingFunctions(true);
       try {
         const response = await axios.get('http://localhost:8000/api/functions');
         const funcs: Record<string, any> = {};
@@ -35,19 +41,33 @@ const ManuscriptEditor: React.FC<ManuscriptEditorProps> = ({ manuscript, setManu
         setFunctions(funcs);
       } catch (error) {
         console.error("Error fetching functions:", error);
+      } finally {
+        setLoadingFunctions(false);
       }
     };
     const fetchManuscripts = async () => {
+      setLoadingManuscripts(true);
       try {
         const response = await axios.get('http://localhost:8000/api/manuscripts');
         setSavedManuscripts(response.data);
       } catch (error) {
         console.error("Error fetching manuscripts:", error);
+      } finally {
+        setLoadingManuscripts(false);
       }
     };
     fetchFunctions();
     fetchManuscripts();
   }, []);
+
+  useEffect(() => {
+    if (manuscript.length > 0 && renderedStepsCount < manuscript.length) {
+      const timer = setTimeout(() => {
+        setRenderedStepsCount((prevCount: number) => Math.min(prevCount + 5, manuscript.length));
+      }, 100); // Render 1 step every 100ms
+      return () => clearTimeout(timer);
+    }
+  }, [manuscript, renderedStepsCount]);
 
   const handleAddStep = () => {
     if (selectedFunction && functions[selectedFunction]) {
@@ -270,7 +290,7 @@ const ManuscriptEditor: React.FC<ManuscriptEditorProps> = ({ manuscript, setManu
             </Box>
           ))}
           <Button size="small" startIcon={<AddCircleOutline />} onClick={() => {
-            const newDict = { ...dictValues, ['new_key']: isValueList ? [''] : '' };
+            const newDict = { ...dictValues, new_key: isValueList ? [''] : '' };
             handleParamChange(stepIndex, param.name, newDict);
           }}>
             Add Entry

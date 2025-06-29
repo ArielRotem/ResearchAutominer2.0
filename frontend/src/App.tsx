@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Container, Grid, Box, Button } from '@mui/material';
+import { AppBar, Toolbar, Typography, Container, Grid, Box, Button, CircularProgress } from '@mui/material';
 import DataPreview from './components/DataPreview';
 import ManuscriptEditor from './components/ManuscriptEditor';
 import LiveTestWindow from './components/LiveTestWindow';
@@ -11,6 +11,7 @@ function App() {
   const [allData, setAllData] = useState<any[]>([]); // State to hold all loaded data
   const [sampleData, setSampleData] = useState<any[]>([]);
   const [headers, setHeaders] = useState<string[]>([]);
+  const [runningFullManuscript, setRunningFullManuscript] = useState<boolean>(false);
 
   const handleRunFullManuscript = async () => {
     if (!allData.length) {
@@ -63,12 +64,15 @@ function App() {
             <DataPreview allData={allData} setAllData={setAllData} setSampleData={setSampleData} setHeaders={setHeaders} headers={headers} />
           </Grid>
           
+          <Grid item xs={12}>
+            <LiveTestWindow manuscript={manuscript} sampleData={sampleData} headers={headers} />
+          </Grid>
+
           <Grid item xs={6}>
             <ManuscriptEditor manuscript={manuscript} setManuscript={setManuscript} headers={headers} />
-            <AIAssistant headers={headers} />
           </Grid>
           <Grid item xs={6}>
-            <LiveTestWindow manuscript={manuscript} sampleData={sampleData} headers={headers} />
+            <AIAssistant headers={headers} />
           </Grid>
         </Grid>
       </Container>

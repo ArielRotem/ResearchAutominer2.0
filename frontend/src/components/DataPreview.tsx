@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Box, Checkbox, FormControlLabel, FormGroup, Popover, IconButton } from '@mui/material';
+import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Box, Checkbox, FormControlLabel, FormGroup, Popover, IconButton, CircularProgress } from '@mui/material';
 import { ArrowBackIos, ArrowForwardIos, Visibility, VisibilityOff } from '@mui/icons-material';
 import axios from 'axios';
 
@@ -19,6 +19,7 @@ const DataPreview: React.FC<DataPreviewProps> = ({ setHeaders, setSampleData, se
   const [currentPage, setCurrentPage] = useState(0);
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(new Set());
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [uploading, setUploading] = useState<boolean>(false);
 
   useEffect(() => {
     // Load visible columns from local storage on mount
