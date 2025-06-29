@@ -52,7 +52,9 @@ function App() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Research Autominer
           </Typography>
-          <Button color="inherit" onClick={handleRunFullManuscript}>Run Full Manuscript</Button>
+          <Button color="inherit" onClick={handleRunFullManuscript} disabled={runningFullManuscript}>
+            {runningFullManuscript ? <CircularProgress size={24} color="inherit" /> : 'Run Full Manuscript'}
+          </Button>
         </Toolbar>
       </AppBar>
       <Container maxWidth="xl" sx={{ mt: 4 }}>
