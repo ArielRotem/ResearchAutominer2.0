@@ -45,7 +45,7 @@ const AIAssistant: React.FC<AIAssistantProps> = ({ headers }) => {
         {isLoading ? 'Generating...' : 'Generate Function'}
       </Button>
       {generatedCode && (
-        <Box sx={{ mt: 2, height: '300px', border: '1px solid #ccc' }}>
+        <Box sx={{ mt: 2, height: '300px', border: '1px solid #e0e0e0', borderRadius: '8px' }}>
           <Editor
             height="100%"
             defaultLanguage="python"

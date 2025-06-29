@@ -338,7 +338,7 @@ const ManuscriptEditor: React.FC<ManuscriptEditorProps> = ({ manuscript, setManu
           onChange={(e) => setManuscriptName(e.target.value)}
           size="small"
         />
-        <Button variant="contained" onClick={handleSave} disabled={!manuscriptName || !manuscript.length}>
+        <Button variant="contained" onClick={handleSave} disabled={!manuscriptName || !manuscript.length || savingManuscript} sx={{ mr: 1 }}>
           Save
         </Button>
         <FormControl size="small" sx={{ minWidth: 120 }}>
@@ -347,12 +347,18 @@ const ManuscriptEditor: React.FC<ManuscriptEditorProps> = ({ manuscript, setManu
             label="Load"
             onChange={(e) => handleLoad(e.target.value as string)}
             value=""
+            disabled={loadingSpecificManuscript || loadingManuscripts}
+            sx={{ minWidth: 120 }}
           >
-            {savedManuscripts.map((name) => (
-              <MenuItem key={name} value={name}>
-                {name}
-              </MenuItem>
-            ))}
+            {loadingSpecificManuscript || loadingManuscripts ? (
+              <MenuItem disabled><CircularProgress size={20} /></MenuItem>
+            ) : (
+              savedManuscripts.map((name) => (
+                <MenuItem key={name} value={name}>
+                  {name}
+                </MenuItem>
+              ))
+            )}
           </Select>
         </FormControl>
       </Box>

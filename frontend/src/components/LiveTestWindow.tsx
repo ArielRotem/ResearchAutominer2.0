@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Button, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid } from '@mui/material';
+import { Button, Paper, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, CircularProgress } from '@mui/material';
 import axios from 'axios';
 
 interface LiveTestWindowProps {
@@ -12,6 +12,7 @@ interface LiveTestWindowProps {
 const LiveTestWindow: React.FC<LiveTestWindowProps> = ({ manuscript, sampleData, headers }) => {
   const [outputData, setOutputData] = useState<any[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [testingManuscript, setTestingManuscript] = useState<boolean>(false);
 
   const handleTest = async () => {
     setError(null); // Clear previous errors
@@ -33,10 +34,10 @@ const LiveTestWindow: React.FC<LiveTestWindowProps> = ({ manuscript, sampleData,
   };
 
   return (
-    <Paper sx={{ p: 2 }}>
-      <Typography variant="h6" gutterBottom>Live Data Test</Typography>
-      <Button variant="contained" onClick={handleTest} disabled={!manuscript.length || !sampleData.length}>
-        Test
+    <Paper sx={{ p: 3 }}>
+      <Typography variant="h5" gutterBottom>Live Data Test</Typography>
+      <Button variant="contained" onClick={handleTest} disabled={!manuscript.length || !sampleData.length || testingManuscript} sx={{ mb: 2 }}>
+        {testingManuscript ? <CircularProgress size={24} /> : 'Test'}
       </Button>
       {error && (
         <Typography color="error" sx={{ mt: 2, whiteSpace: 'pre-wrap' }}>
@@ -46,8 +47,8 @@ const LiveTestWindow: React.FC<LiveTestWindowProps> = ({ manuscript, sampleData,
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item xs={12}>
           <Typography variant="subtitle1">Input</Typography>
-          <TableContainer sx={{ maxHeight: 300 }}>
-            <Table stickyHeader size="small">
+          <TableContainer sx={{ maxHeight: 300, borderRadius: '8px', border: '1px solid #e0e0e0' }}>
+            <Table stickyHeader size="small" sx={{ '& .MuiTableCell-root': { borderBottom: '1px solid #e0e0e0' } }}>
               <TableHead>
                 <TableRow>
                   {headers.map((header) => (
@@ -69,8 +70,8 @@ const LiveTestWindow: React.FC<LiveTestWindowProps> = ({ manuscript, sampleData,
         </Grid>
         <Grid item xs={12}>
           <Typography variant="subtitle1">Output</Typography>
-          <TableContainer sx={{ maxHeight: 300 }}>
-            <Table stickyHeader size="small">
+          <TableContainer sx={{ maxHeight: 300, borderRadius: '8px', border: '1px solid #e0e0e0' }}>
+            <Table stickyHeader size="small" sx={{ '& .MuiTableCell-root': { borderBottom: '1px solid #e0e0e0' } }}>
               <TableHead>
                 <TableRow>
                   {headers.map((header) => (

@@ -168,7 +168,7 @@ const DataPreview: React.FC<DataPreviewProps> = ({ setHeaders, setSampleData, se
           </Popover>
         </Box>
       </Box>
-      {fileName && <Typography sx={{ mb: 2 }}>File: {fileName} ({allData.length} rows)</Typography>}
+      {fileName && <Typography variant="subtitle1" sx={{ mb: 2, color: 'text.secondary' }}>File: {fileName} ({allData.length} rows)</Typography>}
       
       <TableContainer sx={{ maxHeight: 440, border: '1px solid #f0f0f0' }}>
         <Table stickyHeader size="small" sx={{ '& .MuiTableCell-root': { border: '1px solid #e0e0e0' } }}>
