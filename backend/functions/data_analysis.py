@@ -130,7 +130,7 @@ def generate_patient_specific_dataset(data, start_column, columns_per_set, num_t
     result_df.to_csv(output_file, index=False)
     return result_df
 
-def summarize_keys_and_values_in_raw_map(data, input_column, output_file):
+def summarize_keys_and_values_in_raw_map(data: pd.DataFrame, input_column: str, output_file: str) -> pd.DataFrame:
     """
     Summarize unique keys and their corresponding unique values in raw map-like data.
     """

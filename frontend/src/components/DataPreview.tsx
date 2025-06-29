@@ -7,14 +7,14 @@ interface DataPreviewProps {
   setHeaders: (headers: string[]) => void;
   setSampleData: (data: any[]) => void;
   setAllData: (data: any[]) => void;
+  allData: any[];
+  headers: string[];
 }
 
 const ROWS_PER_PAGE = 5; // Display 5 rows at a time
 const MAX_COL_LENGTH = 50; // Max characters for column display
 
-const DataPreview: React.FC<DataPreviewProps> = ({ setHeaders, setSampleData }) => {
-  const [allData, setAllData] = useState<any[]>([]);
-  const [headersState, setHeadersState] = useState<string[]>([]);
+const DataPreview: React.FC<DataPreviewProps> = ({ setHeaders, setSampleData, setAllData, allData, headers }) => {
   const [fileName, setFileName] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(0);
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(new Set());
@@ -47,7 +47,7 @@ const DataPreview: React.FC<DataPreviewProps> = ({ setHeaders, setSampleData }) 
         });
         setFileName(response.data.filename);
         setHeaders(response.data.headers);
-        setHeadersState(response.data.headers);
+        // setHeadersState(response.data.headers); // This state is no longer needed, using headers directly
         setAllData(response.data.allData);
         setSampleData(response.data.allData.slice(0, ROWS_PER_PAGE)); // Initial sample for LiveTestWindow
 
@@ -90,7 +90,7 @@ const DataPreview: React.FC<DataPreviewProps> = ({ setHeaders, setSampleData }) 
   };
 
   const handleShowAllColumns = () => {
-    setVisibleColumns(new Set(headersState));
+    setVisibleColumns(new Set(headers));
   };
 
   const handleHideAllColumns = () => {
@@ -116,7 +116,7 @@ const DataPreview: React.FC<DataPreviewProps> = ({ setHeaders, setSampleData }) 
     return str;
   };
 
-  const displayedHeaders = headersState.filter(header => visibleColumns.has(header));
+  const displayedHeaders = headers.filter((header: string) => visibleColumns.has(header));
   const displayedRows = allData && Array.isArray(allData) ? allData.slice(currentPage * ROWS_PER_PAGE, (currentPage + 1) * ROWS_PER_PAGE) : [];
 
   return (
@@ -129,7 +129,7 @@ const DataPreview: React.FC<DataPreviewProps> = ({ setHeaders, setSampleData }) 
             <input type="file" hidden onChange={handleFileChange} accept=".csv" />
           </Button>
           <IconButton onClick={handlePopoverOpen} aria-describedby={id}>
-            {visibleColumns.size === headersState.length && headersState.length > 0 ? <Visibility /> : <VisibilityOff />}
+            {visibleColumns.size === headers.length && headers.length > 0 ? <Visibility /> : <VisibilityOff />}
           </IconButton>
           <Popover
             id={id}
@@ -150,7 +150,7 @@ const DataPreview: React.FC<DataPreviewProps> = ({ setHeaders, setSampleData }) 
               <Button onClick={handleShowAllColumns} size="small">Show All</Button>
               <Button onClick={handleHideAllColumns} size="small">Hide All</Button>
               <FormGroup>
-                {headersState.map((header) => (
+                {headers.map((header: string) => (
                   <FormControlLabel
                     key={header}
                     control={
@@ -173,7 +173,7 @@ const DataPreview: React.FC<DataPreviewProps> = ({ setHeaders, setSampleData }) 
         <Table stickyHeader size="small" sx={{ '& .MuiTableCell-root': { border: '1px solid #e0e0e0' } }}>
           <TableHead>
             <TableRow>
-              {displayedHeaders.map((header) => (
+              {displayedHeaders.map((header: string) => (
                 <TableCell key={header} sx={{ fontWeight: 'bold' }}>{header}</TableCell>
               ))}
             </TableRow>
@@ -181,7 +181,7 @@ const DataPreview: React.FC<DataPreviewProps> = ({ setHeaders, setSampleData }) 
           <TableBody>
             {displayedRows.map((row, rowIndex) => (
               <TableRow key={rowIndex}>
-                {displayedHeaders.map((header) => (
+                {displayedHeaders.map((header: string) => (
                   <TableCell key={header}>{truncateText(row[header])}</TableCell>
                 ))}
               </TableRow>

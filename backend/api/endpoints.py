@@ -71,6 +71,30 @@ async def test_manuscript(data: Dict[str, Any] = Body(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error processing manuscript: {e}\n\nTraceback:\n{traceback.format_exc()}")
 
+@router.post("/run_full_manuscript")
+async def run_full_manuscript(payload: Dict[str, Any] = Body(...)):
+    """Runs a full manuscript on the provided data and returns the processed data."""
+    data_to_process = payload.get("data", [])
+    manuscript = payload.get("manuscript", [])
+
+    if not data_to_process or not manuscript:
+        raise HTTPException(status_code=400, detail="Data and manuscript are required.")
+
+    try:
+        df = pd.DataFrame(data_to_process)
+        processed_df = run_manuscript(df, manuscript)
+        
+        # Convert all columns to string type to ensure JSON compatibility
+        for col in processed_df.columns:
+            processed_df[col] = processed_df[col].astype(str) # Convert entire column to string
+            processed_df[col] = processed_df[col].replace('nan', None) # Replace string 'nan' with None
+            processed_df[col] = processed_df[col].replace('inf', None) # Replace string 'inf' with None
+            processed_df[col] = processed_df[col].replace('-inf', None) # Replace string '-inf' with None
+
+        return processed_df.to_dict(orient="records")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error running full manuscript: {e}\n\nTraceback:\n{traceback.format_exc()}")
+
 @router.get("/manuscripts")
 def list_manuscripts():
     """Lists all saved manuscript files."""

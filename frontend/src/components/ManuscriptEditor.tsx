@@ -103,9 +103,20 @@ const ManuscriptEditor: React.FC<ManuscriptEditorProps> = ({ manuscript, setManu
     if (!param) return null;
 
     let paramValue = step.params[paramName];
-    // Ensure paramValue is not undefined for controlled components
-    if (paramValue === undefined) {
-      paramValue = param.default !== null ? param.default : '';
+    // Ensure paramValue is not undefined for controlled components and handle dict/list defaults
+    if (paramValue === undefined || paramValue === null) {
+      if (param.annotation && (param.annotation === "<class 'dict'>" || param.annotation.includes('dict'))) {
+        paramValue = {};
+      } else if (param.annotation && param.annotation.includes('list')) {
+        paramValue = [];
+      } else {
+        // Handle typing.Any with numeric defaults
+        if (param.annotation && param.annotation.includes('typing.Any') && (param.default === 0 || param.default === 1)) {
+          paramValue = param.default;
+        } else {
+          paramValue = param.default !== null ? param.default : '';
+        }
+      }
     }
 
     // Boolean parameters
@@ -126,12 +137,12 @@ const ManuscriptEditor: React.FC<ManuscriptEditorProps> = ({ manuscript, setManu
     }
 
     // Parameters that are single column names
-    if (param.name.includes('col') || param.name.includes('column')) {
+    if (param.annotation === 'str' && (param.name.includes('col') || param.name.includes('column') || param.name.includes('name') || param.name.includes('source') || param.name.includes('target') || param.name.includes('result')) && !param.name.includes('list') && !param.name.includes('dict')) {
       return (
         <FormControl fullWidth sx={{ mt: 1 }} size="small">
           <InputLabel>{param.name}</InputLabel>
           <Select
-            value={paramValue || ''}
+            value={String(paramValue) || ''}
             label={param.name}
             onChange={(e) => handleParamChange(stepIndex, param.name, e.target.value)}
           >
@@ -142,6 +153,41 @@ const ManuscriptEditor: React.FC<ManuscriptEditorProps> = ({ manuscript, setManu
             ))}
           </Select>
         </FormControl>
+      );
+    }
+
+    // Parameters that are lists of strings (e.g., words, keywords, phrases)
+    if (param.annotation && (param.annotation.includes('list[str]') || param.annotation.includes('list')) && !param.annotation.includes('dict')) {
+      const listValues = Array.isArray(paramValue) ? paramValue : (paramValue ? [paramValue] : []);
+      return (
+        <Box key={param.name} sx={{ mt: 1, border: '1px solid #ccc', p: 1, borderRadius: '4px' }}>
+          <Typography variant="subtitle2">{param.name} (List)</Typography>
+          {listValues.map((item: string, itemIndex: number) => (
+            <Box key={itemIndex} sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
+              <TextField
+                fullWidth
+                size="small"
+                value={item}
+                onChange={(e) => {
+                  const newList = [...listValues];
+                  newList[itemIndex] = e.target.value;
+                  handleParamChange(stepIndex, param.name, newList);
+                }}
+              />
+              <IconButton size="small" onClick={() => {
+                const newList = listValues.filter((_, i) => i !== itemIndex);
+                handleParamChange(stepIndex, param.name, newList);
+              }}>
+                <RemoveCircleOutline />
+              </IconButton>
+            </Box>
+          ))}
+          <Button size="small" startIcon={<AddCircleOutline />} onClick={() => {
+            handleParamChange(stepIndex, param.name, [...listValues, '']);
+          }}>
+            Add Item
+          </Button>
+        </Box>
       );
     }
 
@@ -233,42 +279,8 @@ const ManuscriptEditor: React.FC<ManuscriptEditorProps> = ({ manuscript, setManu
       );
     }
 
-    // Parameters that are lists of strings (e.g., words, keywords, phrases)
-    if (param.annotation === 'list[str]' || param.annotation === 'list') {
-      const listValues = Array.isArray(paramValue) ? paramValue : (paramValue ? [paramValue] : []);
-      return (
-        <Box key={param.name} sx={{ mt: 1, border: '1px solid #ccc', p: 1, borderRadius: '4px' }}>
-          <Typography variant="subtitle2">{param.name} (List)</Typography>
-          {listValues.map((item: string, itemIndex: number) => (
-            <Box key={itemIndex} sx={{ display: 'flex', alignItems: 'center', mt: 0.5 }}>
-              <TextField
-                fullWidth
-                size="small"
-                value={item}
-                onChange={(e) => {
-                  const newList = [...listValues];
-                  newList[itemIndex] = e.target.value;
-                  handleParamChange(stepIndex, param.name, newList);
-                }}
-              />
-              <IconButton size="small" onClick={() => {
-                const newList = listValues.filter((_, i) => i !== itemIndex);
-                handleParamChange(stepIndex, param.name, newList);
-              }}>
-                <RemoveCircleOutline />
-              </IconButton>
-            </Box>
-          ))}
-          <Button size="small" startIcon={<AddCircleOutline />} onClick={() => {
-            handleParamChange(stepIndex, param.name, [...listValues, '']);
-          }}>
-            Add Item
-          </Button>
-        </Box>
-      );
-    }
-
-    // Default to TextField for other parameters
+    // Default to TextField for other parameters, with type="number" for numeric annotations
+    const isNumeric = param.annotation && (param.annotation.includes('int') || param.annotation.includes('float'));
     return (
       <TextField
         key={param.name}
@@ -277,8 +289,9 @@ const ManuscriptEditor: React.FC<ManuscriptEditorProps> = ({ manuscript, setManu
         variant="outlined"
         size="small"
         sx={{ mt: 1 }}
-        value={paramValue || ''}
-        onChange={(e) => handleParamChange(stepIndex, param.name, e.target.value)}
+        value={String(paramValue) || ''}
+        onChange={(e) => handleParamChange(stepIndex, param.name, isNumeric ? Number(e.target.value) : e.target.value)}
+        type={isNumeric ? 'number' : 'text'}
       />
     );
   };

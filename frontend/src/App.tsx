@@ -58,7 +58,7 @@ function App() {
       <Container maxWidth="xl" sx={{ mt: 4 }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <DataPreview setAllData={setAllData} setSampleData={setSampleData} setHeaders={setHeaders} />
+            <DataPreview allData={allData} setAllData={setAllData} setSampleData={setSampleData} setHeaders={setHeaders} headers={headers} />
           </Grid>
           
           <Grid item xs={6}>
