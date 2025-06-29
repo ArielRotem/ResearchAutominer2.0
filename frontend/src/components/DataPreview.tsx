@@ -124,8 +124,8 @@ const DataPreview: React.FC<DataPreviewProps> = ({ setHeaders, setSampleData, se
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
         <Typography variant="h6">Data Preview</Typography>
         <Box>
-          <Button variant="contained" component="label" sx={{ mr: 1 }}>
-            Load CSV
+          <Button variant="contained" component="label" sx={{ mr: 1 }} disabled={uploading}>
+            {uploading ? <CircularProgress size={24} /> : 'Load CSV'}
             <input type="file" hidden onChange={handleFileChange} accept=".csv" />
           </Button>
           <IconButton onClick={handlePopoverOpen} aria-describedby={id}>

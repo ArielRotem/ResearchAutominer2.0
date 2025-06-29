@@ -342,12 +342,17 @@ const ManuscriptEditor: React.FC<ManuscriptEditorProps> = ({ manuscript, setManu
           value={selectedFunction}
           label="Select Function"
           onChange={(e) => setSelectedFunction(e.target.value as string)}
+          disabled={loadingFunctions}
         >
-          {Object.keys(functions).map((funcName) => (
-            <MenuItem key={funcName} value={funcName}>
-              {functions[funcName].name}
-            </MenuItem>
-          ))}
+          {loadingFunctions ? (
+            <MenuItem disabled><CircularProgress size={20} /></MenuItem>
+          ) : (
+            Object.keys(functions).map((funcName) => (
+              <MenuItem key={funcName} value={funcName}>
+                {functions[funcName].name}
+              </MenuItem>
+            ))
+          )}
         </Select>
       </FormControl>
       <Button variant="contained" onClick={handleAddStep} disabled={!selectedFunction}>
