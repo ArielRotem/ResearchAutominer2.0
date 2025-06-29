@@ -1,14 +1,13 @@
 
-from fastapi import APIRouter, UploadFile, File, HTTPException, Body
-from backend.core.function_loader import load_functions
-from backend.core.manuscript_runner import run_manuscript
-from backend.api.gemini_client import generate_function
+import traceback
+from fastapi import APIRouter, UploadFile, File, HTTPException
+from typing import List
 import pandas as pd
 import numpy as np
-import io
-import os
 import json
-from typing import List, Dict, Any
+import os
+from backend.core.manuscript_runner import run_manuscript
+from backend.core.function_loader import load_functions
 
 router = APIRouter()
 MANUSCRIPTS_DIR = "manuscripts"
