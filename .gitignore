@@ -1,0 +1,11 @@
+# Python bytecode files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Editor/OS specific files
+.DS_Store
+
+# Local development resources (ignored)
+local_dev_resources/
